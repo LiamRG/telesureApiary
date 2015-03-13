@@ -1,0 +1,4277 @@
+FORMAT: 1A
+
+# Easy Earn
+This document defines the various Telesure Rewards Program ESB APIs that will be exposed to external systems. These services will allow the Telesure ESB to orchestrate process with various other systems.
+
+# Group DriveFactor Interfaces
+The users set of services at /users has all the required user resources and functions.
+
+## Users [/users/{?accountId,rsaId,firstName,lastName,contactNumber,emailAddress}]
+    
+This operation will create a new user
+
+### Register a new user [POST]
+This payload will register either a PolicyHolder, Regular Driver, Policy Driver or an Aspirant Driver <br><br>
+**Policy Holder** - A person with a Telesure policy who is only a policy holder and not a driver <br>
+**Regular Driver** - A person associated with a Telesure policy who is only a regular driver <br>
+**Policy Driver** - A person associated to Telesure policies who is both a Policy Holder and regular driver <br>
+**Aspirant** - A person who as not association to any Telesure policies <br>
+
++ Request (application/json)
+
+
+    + Header
+    
+             Authorization: Basic dGVzdDpwYXNzd29yZDE=
+             Accept: application/json
+
+    + Body
+    
+            {
+                "accountId": "123456",
+                "userType": "RegularDriver",
+                "rsaId": "0123456789012",
+                "firstName": "Fred",
+                "lastName": "Bloggs",
+                "contactNumber": "0821234567",
+                "emailAddress": "fred@bloggs.com",
+                "marketingYN": "N",
+                "userDriveFactorPassword": "ABC1230",
+                "productTermsConditionsYN": "Y"
+            }
+
+    + Schema
+        
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "type": "object",
+                "properties": {
+                    "accountId": {
+                        "id": "accountId",
+                        "type": "string"
+                    },
+                    "userType": {
+                        "id": "userType",
+                        "type": "string",
+                        "enum": [
+                            "Aspirant",
+                            "PolicyHolder",
+                            "RegularDriver",
+                            "PolicyDriver"
+                        ]
+                    },
+                    "rsaId": {
+                        "id": "rsaId",
+                        "type": "string"
+                    },
+                    "firstName": {
+                        "id": "firstName",
+                        "type": "string"
+                    },
+                    "lastName": {
+                        "id": "lastName",
+                        "type": "string"
+                    },
+                    "contactNumber": {
+                        "id": "contactNumber",
+                        "type": "string"
+                    },
+                    "emailAddress": {
+                        "id": "emailAddress",
+                        "type": "string"
+                    },
+                    "marketingYN": {
+                        "id": "marketingYN",
+                        "type": "string"
+                    },
+                    "userDriveFactorPassword": {
+                        "id": "userDriveFactorPassword",
+                        "type": "string"
+                    },
+                    "productTermsConditionsYN": {
+                        "id": "productTermsConditionsYN",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "accountId",
+                    "userType",
+                    "rsaId",
+                    "firstName",
+                    "lastName",
+                    "contactNumber",
+                    "emailAddress",
+                    "marketingYN",
+                    "userDriveFactorPassword",
+                    "productTermsConditionsYN"
+                ]
+            } 
++ Response 200 (application/json)
+
+    + Header
+    
+                accountId: "123456"
+                userType: "RegularDriver"
+    
+    + Body
+    
+            {
+                "accountId": "123456",
+                "userType": "RegularDriver"
+            }
+    
+    + Schema
+    
+            {
+                  "$schema": "http://json-schema.org/draft-04/schema#",
+                  "id": "/",
+                  "type": "object",
+                  "properties": {
+                    "accountId": {
+                      "id": "accountId",
+                      "type": "string"
+                    },
+                    "userType": {
+                      "id": "userType",
+                      "type": "string",
+                        "enum": [
+                            "Aspirant",
+                            "PolicyHolder",
+                            "RegularDriver",
+                            "PolicyDriver"
+                        ]
+                    }
+                  },
+                  "required": [
+                    "accountId",
+                    "userType"
+                  ]
+                }
+
++ Response 409 (application/json)
+
+  + Body
+  
+            {
+                "errors": [
+                    {
+                        "userMessage": "Duplicate user",
+                        "internalMessage": "Conflict",
+                        "code": 409,
+                        "moreInfo": ""
+                    }
+                ]
+            }
+
+    + Schema
+    
+            {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "id": "/",
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "id": "errors",
+                  "type": "array",
+                  "items": {
+                    "id": "0",
+                    "type": "object",
+                    "properties": {
+                      "userMessage": {
+                        "id": "userMessage",
+                        "type": "string"
+                      },
+                      "internalMessage": {
+                        "id": "internalMessage",
+                        "type": "string"
+                      },
+                      "code": {
+                        "id": "code",
+                        "type": "integer"
+                      },
+                      "moreInfo": {
+                        "id": "moreInfo",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "userMessage",
+                      "internalMessage",
+                      "code",
+                      "moreInfo"
+                    ]
+                  },
+                  "required": [
+                    "0"
+                  ]
+                }
+              },
+              "required": [
+                "errors"
+              ]
+            }
+         
++ Response 400 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with the request.",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The object you are searching for does not exist.",
+                    "internalMessage": "Not found",
+                    "code": 404,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        }
+        
+### Retrieve a user [GET]
+A reusable service that will allow an external system to retrieve details about a specific user.
+
++ Parameters
+    + accountId (optional, string) ... Unique identifier of the user. Must be unique across all systems.
+    + rsaId (optional, string) ... Unique South African identification number
+    + contactNumber (optional, string) ... Users mobile contact number
+    + emailAddress (optional, string) ... Users email address
+    + firstName (optional, string) ... Users first name
+    + lastName (optional, string) ... Users last name
+    
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+              "responseCode": "2",
+              "responseDescription": "2 - Unregistered user",
+              "userBiographicalInformation": {
+                "firstName": "Joe",
+                "lastName": "Bloggs",
+                "contactnumber": "0111234567",
+                "rsaId": "1234567890123",
+                "emailAddress": "someone@somewhere.com"
+              },
+              "driveFactorInformation": {
+                "driveFactorAccountId": "",
+                "driveFactorAppPasswordHash": "",
+                "userType": "RegularDriver"
+              },
+              "userAssistance": {
+                "firstManagementUsage": {
+                  "freeAssistQualification": true,
+                  "assistWorkInProgressCount": 0,
+                  "assistCompletedCount": 0,
+                  "assistCancelledCount": 0
+                }
+              },
+              "policyList": [
+                {
+                  "policyNumber": "123"
+                },
+                {
+                  "policyNumber": "124"
+                },
+                {
+                  "policyNumber": "125"
+                }
+              ]
+            }
+    
+    + Schema
+    
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "id": "/",
+                "type": "object",
+                "properties": {
+                    "responseCode": {
+                        "id": "responseCode",
+                        "type": "string",
+                        "enum": [
+                            "0",
+                            "1",
+                            "2"
+                        ]
+                    },
+                    "responseDescription": {
+                        "id": "responseDescription",
+                        "type": "string",
+                        "enum": [
+                            "0 - User not found",
+                            "1 - Fully Registered User",
+                            "2 - Unregistered user"
+                        ]
+                    },
+                    "userBiographicalInformation": {
+                        "id": "userBiographicalInformation",
+                        "type": "object",
+                        "properties": {
+                            "firstName": {
+                                "id": "firstName",
+                                "type": "string"
+                            },
+                            "lastName": {
+                                "id": "lastName",
+                                "type": "string"
+                            },
+                            "contactnumber": {
+                                "id": "contactnumber",
+                                "type": "string"
+                            },
+                            "rsaId": {
+                                "id": "rsaId",
+                                "type": "string"
+                            },
+                            "emailAddress": {
+                                "id": "emailAddress",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "driveFactorInformation": {
+                        "id": "driveFactorInformation",
+                        "type": "object",
+                        "properties": {
+                            "driveFactorAccountId": {
+                                "id": "driveFactorAccountId",
+                                "type": "string"
+                            },
+                            "driveFactorAppPasswordHash": {
+                                "id": "driveFactorAppPasswordHash",
+                                "type": "string"
+                            },
+                            "userType": {
+                                "id": "userType",
+                                "type": "string",
+                        "enum": [
+                            "Aspirant",
+                            "PolicyHolder",
+                            "RegularDriver",
+                            "PolicyDriver"
+                        ]
+                            }
+                        }
+                    },
+                    "userAssistance": {
+                        "id": "userAssistance",
+                        "type": "object",
+                        "properties": {
+                            "firstManagementUsage": {
+                                "id": "firstManagementUsage",
+                                "type": "object",
+                                "properties": {
+                                    "freeAssistQualification": {
+                                        "id": "freeAssistQualification",
+                                        "type": "boolean"
+                                    },
+                                    "assistWorkInProgressCount": {
+                                        "id": "assistWorkInProgressCount",
+                                        "type": "integer"
+                                    },
+                                    "assistCompletedCount": {
+                                        "id": "assistCompletedCount",
+                                        "type": "integer"
+                                    },
+                                    "assistCancelledCount": {
+                                        "id": "assistCancelledCount",
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "policyList": {
+                        "id": "policyList",
+                        "type": "array",
+                        "items": {
+                            "id": "2",
+                            "type": "object",
+                            "properties": {
+                                "policyNumber": {
+                                    "id": "policyNumber",
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "required": [
+                    "responseCode",
+                    "responseDescription",
+                    "userBiographicalInformation",
+                    "driveFactorInformation",
+                    "userAssistance",
+                    "policyList"
+                ]
+            }
+            
++ Response 409 (application/json)
+
+    + Body
+    
+            {
+              "responseCode": "2",
+              "responseDescription": "2 - Unregistered user",
+              "userBiographicalInformation": {
+                "firstName": "Joe",
+                "lastName": "Bloggs",
+                "contactnumber": "0111234567",
+                "rsaId": "1234567890123",
+                "emailAddress": "someone@somewhere.com"
+              },
+              "driveFactorInformation": {
+                "driveFactorAccountId": "",
+                "driveFactorAppPasswordHash": "",
+                "userType": "RegularDriver"
+              },
+              "userAssistance": {
+                "firstManagementUsage": {
+                  "freeAssistQualification": true,
+                  "assistWorkInProgressCount": 0,
+                  "assistCompletedCount": 0,
+                  "assistCancelledCount": 0
+                }
+              },
+              "policyList": [
+                {
+                  "policyNumber": "123"
+                },
+                {
+                  "policyNumber": "124"
+                },
+                {
+                  "policyNumber": "125"
+                }
+              ]
+            }
+    
+    + Schema
+    
+            {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "id": "/",
+              "type": "object",
+              "properties": {
+                "responseCode": {
+                  "id": "responseCode",
+                  "type": "string",
+                        "enum": [
+                            "0",
+                            "1",
+                            "2"
+                        ]
+                },
+                "responseDescription": {
+                  "id": "responseDescription",
+                  "type": "string",
+                        "enum": [
+                            "0 - User not found",
+                            "1 - Fully Registered User",
+                            "2 - Unregistered user"
+                        ]
+                },
+                "userBiographicalInformation": {
+                  "id": "userBiographicalInformation",
+                  "type": "object",
+                  "properties": {
+                    "firstName": {
+                      "id": "firstName",
+                      "type": "string"
+                    },
+                    "lastName": {
+                      "id": "lastName",
+                      "type": "string"
+                    },
+                    "contactnumber": {
+                      "id": "contactnumber",
+                      "type": "string"
+                    },
+                    "rsaId": {
+                      "id": "rsaId",
+                      "type": "string"
+                    },
+                    "emailAddress": {
+                      "id": "emailAddress",
+                      "type": "string"
+                    }
+                  }
+                },
+                "driveFactorInformation": {
+                  "id": "driveFactorInformation",
+                  "type": "object",
+                  "properties": {
+                    "driveFactorAccountId": {
+                      "id": "driveFactorAccountId",
+                      "type": "string"
+                    },
+                    "driveFactorAppPasswordHash": {
+                      "id": "driveFactorAppPasswordHash",
+                      "type": "string"
+                    },
+                    "userType": {
+                      "id": "userType",
+                      "type": "string",
+                        "enum": [
+                            "Aspirant",
+                            "PolicyHolder",
+                            "RegularDriver",
+                            "PolicyDriver"
+                        ]
+                    }
+                  }
+                },
+                "userAssistance": {
+                  "id": "userAssistance",
+                  "type": "object",
+                  "properties": {
+                    "firstManagementUsage": {
+                      "id": "firstManagementUsage",
+                      "type": "object",
+                      "properties": {
+                        "freeAssistQualification": {
+                          "id": "freeAssistQualification",
+                          "type": "boolean"
+                        },
+                        "assistWorkInProgressCount": {
+                          "id": "assistWorkInProgressCount",
+                          "type": "integer"
+                        },
+                        "assistCompletedCount": {
+                          "id": "assistCompletedCount",
+                          "type": "integer"
+                        },
+                        "assistCancelledCount": {
+                          "id": "assistCancelledCount",
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                },
+                "policyList": {
+                  "id": "policyList",
+                  "type": "array",
+                  "items": {
+                    "id": "2",
+                    "type": "object",
+                    "properties": {
+                      "policyNumber": {
+                        "id": "policyNumber",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "required": [
+                "responseCode",
+                "responseDescription",
+                "userBiographicalInformation",
+                "driveFactorInformation",
+                "userAssistance",
+                "policyList"
+              ]
+            }
+  
++ Response 400 (application/json)
+
+         {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with your request",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        } 
+
++ Response 404 (application/json)
+
+    + Body
+        
+            {
+                "responseCode": "0",
+                "responseDescription": "User not found",
+                "userBiographicalInformation": {
+                    "firstName": "",
+                    "lastName": "",
+                    "contactnumber": "",
+                    "rsaId": "",
+                    "emailAddress": ""
+                },
+                "driveFactorInformation": {
+                    "driveFactorAccountId": "",
+                    "driveFactorAppPasswordHash": "",
+                    "userType": ""
+                },
+                "userAssistance": {
+                    "firstManagementUsage": {
+                        "freeAssistQualification": true,
+                        "assistWorkInProgressCount": 0,
+                        "assistCompletedCount": 0,
+                        "assistCancelledCount": 0
+                    }
+                },
+                "policyList": []
+            }
+            
+    + Schema
+    
+            {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "id": "/",
+              "type": "object",
+              "properties": {
+                "responseCode": {
+                  "id": "responseCode",
+                  "type": "string",
+                        "enum": [
+                            "0",
+                            "1",
+                            "2"
+                        ]
+                },
+                "responseDescription": {
+                  "id": "responseDescription",
+                  "type": "string",
+                        "enum": [
+                            "0 - User not found",
+                            "1 - Fully Registered User",
+                            "2 - Unregistered user"
+                        ]
+                },
+                "userBiographicalInformation": {
+                  "id": "userBiographicalInformation",
+                  "type": "object",
+                  "properties": {
+                    "firstName": {
+                      "id": "firstName",
+                      "type": "string"
+                    },
+                    "lastName": {
+                      "id": "lastName",
+                      "type": "string"
+                    },
+                    "contactnumber": {
+                      "id": "contactnumber",
+                      "type": "string"
+                    },
+                    "rsaId": {
+                      "id": "rsaId",
+                      "type": "string"
+                    },
+                    "emailAddress": {
+                      "id": "emailAddress",
+                      "type": "string"
+                    }
+                  }
+                },
+                "driveFactorInformation": {
+                  "id": "driveFactorInformation",
+                  "type": "object",
+                  "properties": {
+                    "driveFactorAccountId": {
+                      "id": "driveFactorAccountId",
+                      "type": "string"
+                    },
+                    "driveFactorAppPasswordHash": {
+                      "id": "driveFactorAppPasswordHash",
+                      "type": "string"
+                    },
+                    "userType": {
+                      "id": "userType",
+                      "type": "string",
+                        "enum": [
+                            "Aspirant",
+                            "PolicyHolder",
+                            "RegularDriver",
+                            "PolicyDriver"
+                        ]
+                    }
+                  }
+                },
+                "userAssistance": {
+                  "id": "userAssistance",
+                  "type": "object",
+                  "properties": {
+                    "firstManagementUsage": {
+                      "id": "firstManagementUsage",
+                      "type": "object",
+                      "properties": {
+                        "freeAssistQualification": {
+                          "id": "freeAssistQualification",
+                          "type": "boolean"
+                        },
+                        "assistWorkInProgressCount": {
+                          "id": "assistWorkInProgressCount",
+                          "type": "integer"
+                        },
+                        "assistCompletedCount": {
+                          "id": "assistCompletedCount",
+                          "type": "integer"
+                        },
+                        "assistCancelledCount": {
+                          "id": "assistCancelledCount",
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                },
+                "policyList": {
+                  "id": "policyList",
+                  "type": "array",
+                  "items": {}
+                }
+              },
+              "required": [
+                "responseCode",
+                "responseDescription",
+                "userBiographicalInformation",
+                "driveFactorInformation",
+                "userAssistance",
+                "policyList"
+              ]
+            }   
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        } 
+        
+### Update an existing user [PUT]
+This service will allow an external system to update a users detail. This service will never be used by non Aspirant user types.
+
++ Request (application/json)
+
+    + Header
+    
+             Authorization: Basic dGVzdDpwYXNzd29yZDE=
+             Accept: application/json
+
+    + Body
+    
+            {
+                "accountId": "123456",
+                "rsaId": "0123456789012",
+                "name": "Fred",
+                "surname": "Bloggs",
+                "phone": "0115551212",
+                "email": "fred@bloggs.com",
+                "marketingYN": "N",
+                "userDriveFactorPassword": "ABC1230",
+                "productTermsConditionsYN": "Y"
+            }
+
+    + Schema
+        
+            {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "id": "/",
+              "type": "object",
+              "properties": {
+                "accountId": {
+                  "id": "accountId",
+                  "type": "string"
+                },
+                "rsaId": {
+                  "id": "rsaId",
+                  "type": "string"
+                },
+                "name": {
+                  "id": "name",
+                  "type": "string"
+                },
+                "surname": {
+                  "id": "surname",
+                  "type": "string"
+                },
+                "phone": {
+                  "id": "phone",
+                  "type": "string"
+                },
+                "email": {
+                  "id": "email",
+                  "type": "string"
+                },
+                "marketingYN": {
+                  "id": "marketingYN",
+                  "type": "string"
+                },
+                "userDriveFactorPassword": {
+                  "id": "userDriveFactorPassword",
+                  "type": "string"
+                },
+                "productTermsConditionsYN": {
+                  "id": "productTermsConditionsYN",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "accountId"
+              ]
+            }
+
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "accountId": "123456",
+                "userType": "RegularDriver"
+            }
+            
+    + Schema
+    
+            {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "id": "/",
+              "type": "object",
+              "properties": {
+                "accountId": {
+                  "id": "accountId",
+                  "type": "string"
+                },
+                "userType": {
+                  "id": "userType",
+                  "type": "string",
+                        "enum": [
+                            "Aspirant",
+                            "PolicyHolder",
+                            "RegularDriver",
+                            "PolicyDriver"
+                        ]
+                }
+              },
+              "required": [
+                "accountId",
+                "userType"
+              ]
+            }
+             
++ Response 409 (application/json)
+
+    + Body
+    
+            {
+                "errors": [
+                    {
+                        "userMessage": "Email address used",
+                        "internalMessage": "Conflict",
+                        "code": 409,
+                        "moreInfo": ""
+                    }
+                ]
+            }
+            
+    + Schema
+
+            {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "id": "/",
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "id": "errors",
+                  "type": "array",
+                  "items": {
+                    "id": "0",
+                    "type": "object",
+                    "properties": {
+                      "userMessage": {
+                        "id": "userMessage",
+                        "type": "string"
+                      },
+                      "internalMessage": {
+                        "id": "internalMessage",
+                        "type": "string"
+                      },
+                      "code": {
+                        "id": "code",
+                        "type": "integer"
+                      },
+                      "moreInfo": {
+                        "id": "moreInfo",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "userMessage",
+                      "internalMessage",
+                      "code",
+                      "moreInfo"
+                    ]
+                  },
+                  "required": [
+                    "0"
+                  ]
+                }
+              },
+              "required": [
+                "errors"
+              ]
+            }
+    
+
++ Response 405 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not allowed to modify this user type.",
+                    "internalMessage": "Not Allowed",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
+       
++ Response 400 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with the request.",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The object you are searching for does not exist.",
+                    "internalMessage": "Not found",
+                    "code": 404,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        } 
+
+## User dashboard [/users/{accountId}/dashboard]
+This service will used to retrieve a users dashboard
+
+### Retrieve a user dashboard [GET]
+
++ Parameters
+    + accountId (required, string) ... Unique identifier of the user. Must be unique across all systems.
+    
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                          "responseCode": "1",
+                          "responseDescription": "FullyRegisteredDriverthatisbothaPolicyHolderandRegularDriver)",
+                          "userBiographicalInformation": {
+                            "firstName": "Joe",
+                            "lastName": "Bloggs",
+                            "rsaId": "1234567890123"
+                          },
+                          "driveFactorInformation": {
+                            "driveFactorAccountId": "123456",
+                            "userType": "PolicyHolderRegularDriver"
+                          },
+                          "driverList": [
+                            {
+                              "firstName": "Joe",
+                              "lastName": "Bloggs",
+                              "rsaId": "1234567890123",
+                              "userType": "RegularDriver",
+                              "regularDriverAccountId": "1234",
+                              "policyNumber": "1234",
+                              "currentPointsTierValue": 1,
+                              "currentPointsTierDescription": "Tier1",
+                              "actualPointsValue": 300,
+                              "maxPointsTierValue": 4,
+                              "maxPointsTierDescription": "Tier4",
+                              "possiblePointsValue": 500,
+                              "currentMonthEarning": 155.95,
+                              "previousMonthEarning": 120.98,
+                              "driverRating": "Poor Driving"
+                            },
+                            {
+                              "firstName": "Max",
+                              "lastName": "Payne",
+                              "policyNumber": "1235",
+                              "rsaId": "1234567890124",
+                              "userType": "RegularDriver",
+                              "regularDriverAccountId": "1234",
+                              "currentPointsTierValue": 1,
+                              "currentPointsTierDescription": "Tier1",
+                              "actualPointsValue": 300,
+                              "maxPointsTierValue": 4,
+                              "maxPointsTierDescription": "Tier4",
+                              "possiblePointsValue": 500,
+                              "currentMonthEarning": 155.95,
+                              "previousMonthEarning": 120.98,
+                              "driverRating": "Poor Driving"
+                            },
+                            {
+                              "firstName": "Joe",
+                              "lastName": "Bloggs",
+                              "rsaId": "1234567890123",
+                              "userType": "RegularDriver",
+                              "regularDriverAccountId": "1234",
+                              "policyNumber": "1236",
+                              "currentPointsTierValue": 1,
+                              "currentPointsTierDescription": "Tier1",
+                              "actualPointsValue": 300,
+                              "maxPointsTierValue": 4,
+                              "maxPointsTierDescription": "Tier4",
+                              "possiblePointsValue": 500,
+                              "currentMonthEarning": 155.95,
+                              "previousMonthEarning": 120.98,
+                              "driverRating": "Poor Driving"
+                            }
+                          ]
+                        }
+
+    + Schema
+
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "type": "object",
+                "properties": {
+                    "responseCode": {
+                        "id": "responseCode",
+                        "type": "string"
+                    },
+                    "responseDescription": {
+                        "id": "responseDescription",
+                        "type": "string"
+                    },
+                    "userBiographicalInformation": {
+                        "id": "userBiographicalInformation",
+                        "type": "object",
+                        "properties": {
+                            "firstName": {
+                                "id": "firstName",
+                                "type": "string"
+                            },
+                            "lastName": {
+                                "id": "lastName",
+                                "type": "string"
+                            },
+                            "rsaId": {
+                                "id": "rsaId",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "driveFactorInformation": {
+                        "id": "driveFactorInformation",
+                        "type": "object",
+                        "properties": {
+                            "driveFactorAccountId": {
+                                "id": "driveFactorAccountId",
+                                "type": "string"
+                            },
+                            "userType": {
+                                "id": "userType",
+                                "type": "string",
+                                "enum": [
+                                    "RegularDriver",
+                                    "PolicyHolder",
+                                    "Aspirant",
+                                    "PolicyDriver"
+                                ]
+                            }
+                        }
+                    },
+                    "driverList": {
+                        "id": "driverList",
+                        "type": "array",
+                        "items": {
+                            "id": "2",
+                            "type": "object",
+                            "properties": {
+                                "firstName": {
+                                    "id": "firstName",
+                                    "type": "string"
+                                },
+                                "lastName": {
+                                    "id": "lastName",
+                                    "type": "string"
+                                },
+                                "rsaId": {
+                                    "id": "rsaId",
+                                    "type": "string"
+                                },
+                                "userType": {
+                                    "id": "userType",
+                                    "type": "string"
+                                },
+                                "regularDriverAccountId": {
+                                    "id": "regularDriverAccountId",
+                                    "type": "string"
+                                },
+                                "policyNumber": {
+                                    "id": "policyNumber",
+                                    "type": "string"
+                                },
+                                "currentPointsTierValue": {
+                                    "id": "currentPointsTierValue",
+                                    "type": "integer"
+                                },
+                                "currentPointsTierDescription": {
+                                    "id": "currentPointsTierDescription",
+                                    "type": "string"
+                                },
+                                "actualPointsValue": {
+                                    "id": "actualPointsValue",
+                                    "type": "integer"
+                                },
+                                "maxPointsTierValue": {
+                                    "id": "maxPointsTierValue",
+                                    "type": "integer"
+                                },
+                                "maxPointsTierDescription": {
+                                    "id": "maxPointsTierDescription",
+                                    "type": "string"
+                                },
+                                "possiblePointsValue": {
+                                    "id": "possiblePointsValue",
+                                    "type": "integer"
+                                },
+                                "currentMonthEarning": {
+                                    "id": "currentMonthEarning",
+                                    "type": "number"
+                                },
+                                "previousMonthEarning": {
+                                    "id": "previousMonthEarning",
+                                    "type": "number"
+                                },
+                                "driverRating": {
+                                    "id": "driverRating",
+                                    "type": "string",
+                                    "enum": [
+                                        "Poor Driving",
+                                        "Average Driving",
+                                        "Good Driving",
+                                        "Excellent Driving",
+                                        "Exceptional Driving"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "required": [
+                    "responseCode",
+                    "responseDescription",
+                    "userBiographicalInformation",
+                    "driveFactorInformation",
+                    "driverList"
+                ]
+            }
+
++ Response 400 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with the request.",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The object you are searching for does not exist.",
+                    "internalMessage": "Not found",
+                    "code": 404,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        }
+        
+## User type [/users/{accountId}/userType]
+Retrieve a users specific user user type
+### Retrieve a user type [GET]
+
++ Parameters
+    + accountId (required, string) ... Unique identifier of the user. Must be unique across all systems.
+  
++ Response 200 (application/json)
+   
+    + Body
+    
+            {
+                "accountId": "123456",
+                "userType": "RegularDriver"
+            }
+
+    + Schema
+
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "id": "/",
+                "type": "object",
+                "properties": {
+                    "accountId": {
+                        "id": "accountId",
+                        "type": "string"
+                    },
+                    "userType": {
+                        "id": "userType",
+                        "type": "string",
+                        "enum": [
+                            "RegularDriver",
+                            "PolicyHolder",
+                            "Aspirant",
+                            "PolicyDriver"
+                        ]
+                    }
+                },
+                "required": [
+                    "accountId",
+                    "userType"
+                ]
+            }
+            
++ Response 400 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with the request.",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The object you are searching for does not exist.",
+                    "internalMessage": "Not found",
+                    "code": 404,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        } 
+
+## User card link [/users/{accountId}/userCardLink]
+Retrieve a users card link
+
+### Get user payment card link [GET]
+
++ Parameters
+    + accountId (required, string) ... Unique identifier of the user. Must be unique across all systems.
+
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "accountId": "123456",
+                "userType" : "RegularDriver",
+                "cardNumber" : "1234567890"
+            }
+    
+    + Schema
+    
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "id": "/",
+                "type": "object",
+                "properties": {
+                    "accountId": {
+                        "id": "accountId",
+                        "type": "string"
+                    },
+                    "userType": {
+                        "id": "userType",
+                        "type": "string",
+                        "enum": [
+                            "RegularDriver",
+                            "PolicyHolder",
+                            "Aspirant",
+                            "PolicyDriver"
+                        ]
+                    },
+                    "cardNumber": {
+                        "id": "cardNumber",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "accountId",
+                    "userType",
+                    "cardNumber"
+                ]
+            }
+
++ Response 400 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with the request.",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The object you are searching for does not exist.",
+                    "internalMessage": "Not found",
+                    "code": 404,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        } 
+
+## User refer friend [/user/referFriend]
+This service will be used by an external calling system when a friend needs to be referred to use the DriveFactor interface.
+
+### Set refer a friend [POST]
+
++ Request (application/json)
+
+    + Header
+    
+             Authorization: Basic dGVzdDpwYXNzd29yZDE=
+             Accept: application/json
+
+    + Body
+    
+            {
+               "friendFirstName" : "Joe",
+               "friendLastName" : "Bloggs",
+               "friendEmailAddress" : "someone@somewhere.com",
+               "friendContactMobileNumber" : "0821234567",
+               "accountId" : "123456"
+            }
+
+    + Schema
+    
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "id": "/",
+                "type": "object",
+                "properties": {
+                    "friendFirstName": {
+                        "id": "friendFirstName",
+                        "type": "string"
+                    },
+                    "friendLastName": {
+                        "id": "friendLastName",
+                        "type": "string"
+                    },
+                    "friendEmailAddress": {
+                        "id": "friendEmailAddress",
+                        "type": "string"
+                    },
+                    "friendContactMobileNumber": {
+                        "id": "friendContactMobileNumber",
+                        "type": "string"
+                    },
+                    "accountId": {
+                        "id": "accountId",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "friendFirstName",
+                    "friendLastName",
+                    "friendEmailAddress",
+                    "friendContactMobileNumber",
+                    "accountId"
+                ]
+            }
+
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "accountId": "123456",
+                "userType": "RegularDriver"
+            }
+ 
+    + Schema
+
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "id": "/",
+                "type": "object",
+                "properties": {
+                    "accountId": {
+                        "id": "accountId",
+                        "type": "string"
+                    },
+                    "userType": {
+                        "id": "userType",
+                        "type": "string",
+                        "enum": [
+                            "RegularDriver",
+                            "PolicyHolder",
+                            "Aspirant",
+                            "PolicyDriver"
+                        ]
+                    }
+                },
+                "required": [
+                    "accountId",
+                    "userType"
+                ]
+            }
+  
++ Response 400 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with the request.",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The object you are searching for does not exist.",
+                    "internalMessage": "Not found",
+                    "code": 404,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        } 
+            
+
+
+## User telematic score [/users/telematicScore]
+This service will allow a calling system to POST or PUT a driver score for a specific driver for a specific month.
+
+### Set a users drivers score [POST]
+
++ Request (application/json)
+
+    + Header
+    
+             Authorization: Basic dGVzdDpwYXNzd29yZDE=
+             Accept: application/json
+
+    + Body
+            
+            {
+                "accountId" : "1234",
+                "calculatedScore" : "Poor Driving",
+                "calculatedScoreDate" : "12/01/2014"
+            }
+    
+    + Schema
+    
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "id": "/",
+                "type": "object",
+                "properties": {
+                    "accountId": {
+                        "id": "accountId",
+                        "type": "string"
+                    },
+                    "calculatedScore": {
+                        "id": "calculatedScore",
+                        "type": "string",
+                        "enum": [
+                            "Poor Driving",
+                            "Average Driving",
+                            "Good Driving",
+                            "Excellent Driving",
+                            "Exceptional Driving"
+                        ]
+                    },
+                    "calculatedScoreDate": {
+                        "id": "calculatedScoreDate",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "accountId",
+                    "calculatedScore",
+                    "calculatedScoreDate"
+                ]
+            }
+            
+            
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "accountId": "123456",
+                "userType": "RegularDriver"
+            }
+
+    + Schema
+
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "id": "/",
+                "type": "object",
+                "properties": {
+                    "accountId": {
+                        "id": "accountId",
+                        "type": "string"
+                    },
+                    "userType": {
+                        "id": "userType",
+                        "type": "string",
+                        "enum": [
+                            "RegularDriver",
+                            "PolicyHolder",
+                            "Aspirant",
+                            "PolicyDriver"
+                        ]
+                    }
+                },
+                "required": [
+                    "accountId",
+                    "userType"
+                ]
+            }
+
++ Response 409 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You have already submitted a score for this user for your specified time.",
+                    "internalMessage": "Conflict",
+                    "code": 409,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
+
++ Response 400 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with the request.",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The object you are searching for does not exist.",
+                    "internalMessage": "Not found",
+                    "code": 404,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        } 
+        
+
+### Update a users drivers score [PUT]
+
++ Request (application/json)
+
+    + Header
+    
+             Authorization: Basic dGVzdDpwYXNzd29yZDE=
+             Accept: application/json
+
+    + Body
+            
+            {
+                "accountId" : "1234",
+                "calculatedScore" : "Poor Driving",
+                "calculatedScoreDate" : "12/01/2014"
+            }
+    
+    + Schema
+    
+                {
+                                "$schema": "http://json-schema.org/draft-04/schema#",
+                                "id": "/",
+                                "type": "object",
+                                "properties": {
+                                    "accountId": {
+                                        "id": "accountId",
+                                        "type": "string"
+                                    },
+                                    "calculatedScore": {
+                                        "id": "calculatedScore",
+                                        "type": "string",
+                                        "enum": [
+                                            "Poor Driving",
+                                            "Average Driving",
+                                            "Good Driving",
+                                            "Excellent Driving",
+                                            "Exceptional Driving"
+                                        ]
+                                    },
+                                    "calculatedScoreDate": {
+                                        "id": "calculatedScoreDate",
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "accountId",
+                                    "calculatedScore",
+                                    "calculatedScoreDate"
+                                ]
+                            }
+            
+            
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "accountId": "123456",
+                "userType": "RegularDriver"
+            }
+
+    + Schema
+
+                {
+                    "$schema": "http://json-schema.org/draft-04/schema#",
+                    "id": "/",
+                    "type": "object",
+                    "properties": {
+                        "accountId": {
+                            "id": "accountId",
+                            "type": "string"
+                        },
+                        "userType": {
+                            "id": "userType",
+                            "type": "string",
+                            "enum": [
+                                "RegularDriver",
+                                "PolicyHolder",
+                                "Aspirant",
+                                "PolicyDriver"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "accountId",
+                        "userType"
+                    ]
+                }
+
++ Response 409 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You have already submitted a score for this user for your specified time.",
+                    "internalMessage": "Conflict",
+                    "code": 409,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
+
+
++ Response 400 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with the request.",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The object you are searching for does not exist.",
+                    "internalMessage": "Not found",
+                    "code": 404,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        } 
+
+      
+## Set user request assistance [/users/setRequestAssistance]
+Request Assistance from either FirstManagement or EuropAssist
+
+### Set a user request assistance [POST]
+
++ Request (application/json)
+
+    + Header
+    
+             Authorization: Basic dGVzdDpwYXNzd29yZDE=
+             Accept: application/json
+    
+    + Schema
+    
+                {
+                    "$schema": "http://json-schema.org/draft-04/schema#",
+                    "id": "/",
+                    "type": "object",
+                    "properties": {
+                        "accountId": {
+                            "id": "accountId",
+                            "type": "string"
+                        },
+                        "assistType": {
+                            "id": "assistType",
+                            "type": "string",
+                            "enum": [
+                                "CAR",
+                                "HOME"
+                            ]
+                        },
+                        "latitude": {
+                            "id": "latitude",
+                            "type": "string"
+                        },
+                        "longitude": {
+                            "id": "longitude",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "accountId",
+                        "assistType",
+                        "latitude",
+                        "longitude"
+                    ]
+                }
+    
+    + Body
+    
+            {
+              "accountId": "123456",
+              "assistType" : "CAR",
+              "latitude": "-28.234924",
+              "longitude": "-28.234924"
+            }
+
+            
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "assistanceRequestId":"FAM4344",
+                "accountId": "123456",
+                "userType": "RegularDriver"
+            }
+
+    + Schema
+
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "id": "/",
+                "type": "object",
+                "properties": {
+                    "assistanceRequestId": {
+                        "id": "assistanceRequestId",
+                        "type": "string"
+                    },
+                    "accountId": {
+                        "id": "accountId",
+                        "type": "string"
+                    },
+                    "userType": {
+                        "id": "userType",
+                        "type": "string",
+                        "enum": [
+                            "RegularDriver",
+                            "PolicyHolder",
+                            "Aspirant",
+                            "PolicyDriver"
+                        ]
+                    }
+                },
+                "required": [
+                    "assistanceRequestId",
+                    "accountId",
+                    "userType"
+                ]
+            }
+
++ Response 400 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with the request.",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The object you are searching for does not exist.",
+                    "internalMessage": "Not found",
+                    "code": 404,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        } 
+        
+## User Assistance Qualification [/users/{accountId}/assistanceQualifier]
+Get a users free assistance indicator. A true means that the user can get free assistance and false means its paid.
+
+### Get assistance qualification [GET]
+
++ Parameters
+
+    + accountId (required, number) ... Users unqiue account number from the mobile app
+    
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "accountId": 12345,
+                "userType": "RegularDriver",
+                "userAssistance": {
+                    "firstManagementUsage": {
+                        "freeAssistQualification": true,
+                        "assistPending": 1,
+                        "assistWorkInProgressCount": 0,
+                        "assistCompletedCount": 12,
+                        "assistCancelledCount": 2
+                    }
+                }
+            }
+
+    + Schema
+    
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "id": "/",
+                "type": "object",
+                "properties": {
+                    "accountId": {
+                        "id": "accountId",
+                        "type": "integer"
+                    },
+                    "userType": {
+                        "id": "userType",
+                        "type": "string",
+                        "enum": [
+                            "RegularDriver",
+                            "PolicyHolder",
+                            "Aspirant",
+                            "PolicyDriver"
+                        ]
+                    },
+                    "userAssistance": {
+                        "id": "userAssistance",
+                        "type": "object",
+                        "properties": {
+                            "firstManagementUsage": {
+                                "id": "firstManagementUsage",
+                                "type": "object",
+                                "properties": {
+                                    "freeAssistQualification": {
+                                        "id": "freeAssistQualification",
+                                        "type": "boolean"
+                                    },
+                                    "assistPending": {
+                                        "id": "assistPending",
+                                        "type": "integer"
+                                    },
+                                    "assistWorkInProgressCount": {
+                                        "id": "assistWorkInProgressCount",
+                                        "type": "integer"
+                                    },
+                                    "assistCompletedCount": {
+                                        "id": "assistCompletedCount",
+                                        "type": "integer"
+                                    },
+                                    "assistCancelledCount": {
+                                        "id": "assistCancelledCount",
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "required": [
+                    "accountId",
+                    "userType",
+                    "userAssistance"
+                ]
+            }
+    
++ Response 400 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with the request.",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The object you are searching for does not exist.",
+                    "internalMessage": "Not found",
+                    "code": 404,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        } 
+        
+
+## Get users fuel transactions [/users/{accountId}/fuelTransactions]
+Get users fuel transactions
+
+### Get users fuel transactions [GET]
+
++ Parameters
+
+    + accountId (required, number) ... Users unqiue account number from the mobile app
+    
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "fuelTransactionList": [
+                    {
+                        "dateTime": "2015-11-15 13:43",
+                        "amount": "734.56",
+                        "cashBackEarned": "36.73"
+                    },
+                    {
+                        "dateTime": "2015-11-30 17:13",
+                        "amount": "700.42",
+                        "cashBackEarned": "30.75"
+                    }
+                ]
+            }
+    
++ Response 400 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with the request.",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The object you are searching for does not exist.",
+                    "internalMessage": "Not found",
+                    "code": 404,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        } 
+        
+## Get users activities [/users/{accountId}/userActivities{?activityFromDate,activityToDate}]
+Get users activities. By default this service will return only the activities for the current month which is determined by the ESB sysdate. When a date range is supplied, the response will filter activities where the activity date is between the from and to date.
+
+### Get users activities [GET]
+
++ Parameters
+
+    + accountId (required, number) ... Users unqiue account number from the mobile app
+    + activityFromDate (optional, string) ... This is the activity from date used in the filter of the activity date range. UTC date format. E.g 2015-02-25T16:42:11+00:00
+    + activityToDate (optional, string) ... This is the activity to date used in the filter of the activity date range. UTC date format. E.g. 2015-02-25T16:42:11+00:00
+
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "activityList": [
+                    {
+                        "activityId": "001",
+                        "activityName": "Home Contents Cover",
+                        "activityChapter": "Insure With Us",
+                        "possiblePoints": "50",
+                        "actualPoints": "50"
+                    },
+                    {
+                        "activityId": "002",
+                        "activityName": "Building Cover",
+                        "activityChapter": "Insure With Us",
+                        "possiblePoints": "50",
+                        "actualPoints": "0"
+                    },
+                    {
+                        "activityId": "003",
+                        "activityName": "Verify Policy Online",
+                        "activityChapter": "Keep Us Informed",
+                        "possiblePoints": "100",
+                        "actualPoints": "0"
+                    }
+                ]
+            }
+       
++ Response 400 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with the request.",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The object you are searching for does not exist.",
+                    "internalMessage": "Not found",
+                    "code": 404,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        } 
+        
+## Get users achievements [/users/{accountId}/userAchievements{?achievementFromDate,achievementToDate}]
+Get users achievements.By default this service will return only the activities for the current month which is determined by the ESB sysdate. When a date range is supplied, the response will filter activities where the achievement date is between the from and to date.
+
+### Get users achievements [GET]
+
++ Parameters
+
+    + accountId (required, number) ... Users unqiue account number from the mobile app
+    + achievementFromDate (optional, string) ... This is the achievement from date used in the filter of the achievement date range. UTC date format. E.g 2015-02-25T16:42:11+00:00
+    + achievementToDate (optional, string) ... This is the achievement to date used in the filter of the achievement date range. UTC date format. E.g. 2015-02-25T16:42:11+00:00
+
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "rewardTitle": "First Good Month",
+                "achievementList": [
+                    {
+                        "achievementID": "010",
+                        "achievementName": "First 100km",
+                        "achievementSequence": "1",
+                        "archievedYN": "Y"
+                    },
+                    {
+                        "achievementID": "011",
+                        "achievementName": "No Night Driving 3 days",
+                        "achievementSequence": "2",
+                        "archievedYN": "N"
+                    },
+                    {
+                        "achievementID": "012",
+                        "achievementName": "Excellent Driving Score",
+                        "achievementSequence": "3",
+                        "archievedYN": "N"
+                    }
+                ]
+            }
+    
+
++ Response 400 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with the request.",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The object you are searching for does not exist.",
+                    "internalMessage": "Not found",
+                    "code": 404,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        } 
+        
+## Get user cashback payments [/users/{accountId}/cashbackPayments{?cashbackFromDate,cashBackToDate}]
+This service will return the list of cashback payment for the participant with the corresponding status. When no cash back dates are supplied, it is taken as all records for this user be returned.
+
+### Get user cashback payments [GET]
+
++ Parameters
+    + accountId (required, string) ... Unique identifier of the user. Must be unique across all systems.
+    + cashbackFromDate (optional, string) ... This is the transaction from date used in the filter of the transactionDate range. UTC date format. E.g 2015-02-25T16:42:11+00:00
+    + cashBackToDate (optional, string) ... This is the transaction to date used in the filter of the transactionDate range. UTC date format. E.g. 2015-02-25T16:42:11+00:00
+
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "totalCashBackEarnedValue" : 599.95,
+                "cashbackPaymentsList": [
+                    {
+                        "paymentTransactionID": "001",
+                        "fuelTransactionAmountValue": 100.99,
+                        "fuelTransactionDate": "31/01/2014",
+                        "fuelTransactionLocation" : "Total Woodmead",
+                        "fuelCashbackValue" : 12.99
+                    },
+                    {
+                        "paymentTransactionID": "002",
+                        "fuelTransactionAmountValue": 100.99,
+                        "fuelTransactionDate": "31/02/2014",
+                        "fuelTransactionLocation" : "Total Rivonia",
+                        "fuelCashbackValue" : 12.99
+                    },
+                    {
+                        "paymentTransactionID": "003",
+                        "fuelTransactionAmountValue": 100.99,
+                        "fuelTransactionDate": "31/03/2014",
+                        "fuelTransactionLocation" : "Total Dainfern",
+                        "fuelCashbackValue" : 12.99
+                    }
+                ]
+            }    
+    
++ Response 400 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with the request.",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The object you are searching for does not exist.",
+                    "internalMessage": "Not found",
+                    "code": 404,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        } 
+        
+## User survey [/users/survey]
+This service will POST and PUT survey information for specific users. E.g. Home Inventory, Geyser Inspection, Online Risk Assessment, Vehicle Inspection and Driving Course.
+
+### Set user survey [POST]
+
++ Request (application/json)
+
+    + Header
+    
+             Authorization: Basic dGVzdDpwYXNzd29yZDE=
+             Accept: application/json
+             
+    + Schema
+    
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "id": "/",
+                "type": "object",
+                "properties": {
+                    "accountId": {
+                        "id": "accountId",
+                        "type": "string"
+                    },
+                    "completedDate": {
+                        "id": "completedDate",
+                        "type": "string"
+                    },
+                    "surveyID": {
+                        "id": "surveyID",
+                        "type": "string"
+                    },
+                    "surveyType": {
+                        "id": "surveyType",
+                        "type": "string"
+                    },
+                    "surveyVersionNumber": {
+                        "id": "surveyVersionNumber",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "accountId",
+                    "completedDate",
+                    "surveyID",
+                    "surveyType",
+                    "surveyVersionNumber"
+                ]
+            }
+
+    + Body
+    
+            {
+                "accountId": "123456",
+                "completedDate": "31/01/2015",
+                "surveyID": "ABC1234",
+                "surveyType" : "setHomeInventory",
+                "surveyVersionNumber" : "123"
+            }
+    
++ Response 200 (application/json)
+
+    + Body
+            
+            {
+                "accountId": "123456",
+                "userType": "RegularDriver"
+            }
+
+    + Schema
+    
+                {
+                    "$schema": "http://json-schema.org/draft-04/schema#",
+                    "id": "/",
+                    "type": "object",
+                    "properties": {
+                        "accountId": {
+                            "id": "accountId",
+                            "type": "string"
+                        },
+                        "userType": {
+                            "id": "userType",
+                            "type": "string",
+                            "enum": [
+                                "RegularDriver",
+                                "PolicyHolder",
+                                "Aspirant",
+                                "PolicyDriver"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "accountId",
+                        "userType"
+                    ]
+                }
+
++ Response 409 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You have already submitted a survey for this user for your specified time and survey type.",
+                    "internalMessage": "Conflict",
+                    "code": 409,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
+
+
++ Response 400 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with the request.",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The object you are searching for does not exist.",
+                    "internalMessage": "Not found",
+                    "code": 404,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        } 
+        
+
+### Update user survey [PUT]
+This service will allow a calling system to update details for an existing survey.
+
++ Request (application/json)
+
+    + Header
+    
+             Authorization: Basic dGVzdDpwYXNzd29yZDE=
+             Accept: application/json
+             
+    + Schema
+    
+                {
+                    "$schema": "http://json-schema.org/draft-04/schema#",
+                    "id": "/",
+                    "type": "object",
+                    "properties": {
+                        "accountId": {
+                            "id": "accountId",
+                            "type": "string"
+                        },
+                        "completedDate": {
+                            "id": "completedDate",
+                            "type": "string"
+                        },
+                        "surveyID": {
+                            "id": "surveyID",
+                            "type": "string"
+                        },
+                        "surveyType": {
+                            "id": "surveyType",
+                            "type": "string"
+                        },
+                        "surveyVersionNumber": {
+                            "id": "surveyVersionNumber",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "accountId",
+                        "completedDate",
+                        "surveyID",
+                        "surveyType",
+                        "surveyVersionNumber"
+                    ]
+                }
+
+    + Body
+    
+            {
+                "accountId": "123456",
+                "completedDate": "31/01/2015",
+                "surveyID": "ABC1234",
+                "surveyType" : "setHomeInventory",
+                "surveyVersionNumber" : "123"
+            }
+    
++ Response 200 (application/json)
+
+    + Body
+            
+            {
+                "accountId": "123456",
+                "userType": "RegularDriver"
+            }
+            
+    + Schema
+    
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "id": "/",
+                "type": "object",
+                "properties": {
+                    "accountId": {
+                        "id": "accountId",
+                        "type": "string"
+                    },
+                    "userType": {
+                        "id": "userType",
+                        "type": "string",
+                        "enum": [
+                            "RegularDriver",
+                            "PolicyHolder",
+                            "Aspirant",
+                            "PolicyDriver"
+                        ]
+                    }
+                },
+                "required": [
+                    "accountId",
+                    "userType"
+                ]
+            }
+            
++ Response 400 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with the request.",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The object you are searching for does not exist.",
+                    "internalMessage": "Not found",
+                    "code": 404,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        } 
+        
+## Get user fuel spend limits [/users/{accountId}/fuelSpendLimits]
+This service will return the fuel spend limits for the specified accountId
+
+### Retrieve a user fuel spend limits [GET]
+
++ Parameters
+    + accountId (required, string) ... Unique identifier of the user. Must be unique across all systems.
+  
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "premiumCapLimit": 550.00,
+                "fuelCapLimit": 25.00
+                }
+
+
+    + Schema
+    
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "type": "object",
+                "properties": {
+                    "premiumCapLimit": {
+                        "id": "premiumCapLimit",
+                        "required" : true,
+                        "type": "integer"
+                    },
+                    "fuelCapLimit": {
+                        "id": "fuelCapLimit",
+                        "required" : true,
+                        "type": "integer"
+                    }
+                }
+            }
+
++ Response 400 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with the request.",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The object you are searching for does not exist.",
+                    "internalMessage": "Not found",
+                    "code": 404,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        } 
+        
+## User payment card link [/users/paymentCardLink]
+These services will allow a calling system to SET and UPDATE  a Card Link for a user. The card number is not the full credit card number but rather just a combination of the first 6 and last 4 digits.
+
+### Set user payment card link [POST]
+
++ Request (application/json)
+
+    + Header
+    
+             Authorization: Basic dGVzdDpwYXNzd29yZDE=
+             Accept: application/json
+
+    + Schema
+    
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "id": "/",
+                "type": "object",
+                "properties": {
+                    "accountId": {
+                        "id": "accountId",
+                        "type": "string"
+                    },
+                    "cardNumber": {
+                        "id": "cardNumber",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "accountId",
+                    "cardNumber"
+                ]
+            }
+
+
+    + Body
+    
+            {
+                "accountId": "123456",
+                "cardNumber" : "1234567890"
+            }
+    
++ Response 200 (application/json)
+
+    + Body
+            
+            {
+                "accountId": "123456",
+                "userType": "RegularDriver"
+            }
+
+    + Schema
+
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "id": "/",
+                "type": "object",
+                "properties": {
+                    "accountId": {
+                        "id": "accountId",
+                        "type": "string"
+                    },
+                    "userType": {
+                        "id": "userType",
+                        "type": "string",
+                        "enum": [
+                            "RegularDriver",
+                            "PolicyHolder",
+                            "Aspirant",
+                            "PolicyDriver"
+                        ]
+                    }
+                },
+                "required": [
+                    "accountId",
+                    "userType"
+                ]
+            }
+            
++ Response 409 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Conflict found on this card that was captured",
+                    "internalMessage": "Bad Request",
+                    "code": 409,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 400 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with the request.",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The account id supplied does not belong to anyone registered.",
+                    "internalMessage": "Not found",
+                    "code": 404,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        } 
+
+### Update user payment card link [PUT]
+
++ Request (application/json)
+
+    + Header
+    
+             Authorization: Basic dGVzdDpwYXNzd29yZDE=
+             Accept: application/json
+
+    + Schema
+    
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "id": "/",
+                "type": "object",
+                "properties": {
+                    "accountId": {
+                        "id": "accountId",
+                        "type": "string"
+                    },
+                    "cardNumber": {
+                        "id": "cardNumber",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "accountId",
+                    "cardNumber"
+                ]
+            }
+
+
+    + Body
+    
+            {
+                "accountId": "123456",
+                "cardNumber" : "1234567890"
+            }
+    
+
++ Response 200 (application/json)
+
+    + Body
+            
+            {
+                "accountId": "123456",
+                "userType": "RegularDriver"
+            }
+
+            
+    + Schema
+    
+                {
+                    "$schema": "http://json-schema.org/draft-04/schema#",
+                    "id": "/",
+                    "type": "object",
+                    "properties": {
+                        "accountId": {
+                            "id": "accountId",
+                            "type": "string"
+                        },
+                        "userType": {
+                            "id": "userType",
+                            "type": "string",
+                            "enum": [
+                                "RegularDriver",
+                                "PolicyHolder",
+                                "Aspirant",
+                                "PolicyDriver"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "accountId",
+                        "userType"
+                    ]
+                }
+
+            
++ Response 409 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Conflict found on this card that was captured",
+                    "internalMessage": "Bad Request",
+                    "code": 409,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 400 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with the request.",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The object you are searching for does not exist.",
+                    "internalMessage": "Not found",
+                    "code": 404,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        } 
+
+## User Rewards Updates [/users/rewards]
+This operation will be used by an external system to update a specific users rewards data within the ESB.
+
+### Update user rewards [POST]
+
++ Request (application/json)
+
+    + Body
+    
+            {
+                
+            }
+
++ Response 400 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with the request.",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The object you are searching for does not exist.",
+                    "internalMessage": "Not found",
+                    "code": 404,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        } 
+
+## User Fuel Slip Transaction [/users/fuelsliptransaction/{accountId}]
+
+### Create fuel slip transaction [POST]
+
++ Request (application/json)
+
+    + Body
+    
+            {
+                "accountId" : "123456",
+                "transactionSource" : "OCR",
+                "dateOfTransaction" : "2015-09-23",
+                "timeOfTransaction" : "14:08:22",
+                "transactionNumber" : "12312313",
+                "randAmount" : 250.76,
+                "cardNumber" : "123456****1234",
+                "stationid" : "1",
+                "stationName" : "Total Midrand",
+                "litresDispensed" : 20.87,
+                "fuelType" : "Eco Diesel 95"
+            }
+            
+    + Schema
+    
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "id": "/",
+                "type": "object",
+                "properties": {
+                    "accountId": {
+                        "id": "accountId",
+                        "type": "string"
+                    },
+                    "transactionSource": {
+                        "id": "transactionSource",
+                        "type": "string",
+                        "enum": [
+                            "Manual",
+                            "OCR"
+                        ]
+                    },
+                    "dateOfTransaction": {
+                        "id": "dateOfTransaction",
+                        "type": "string"
+                    },
+                    "timeOfTransaction": {
+                        "id": "timeOfTransaction",
+                        "type": "string"
+                    },
+                    "transactionNumber": {
+                        "id": "transactionNumber",
+                        "type": "string"
+                    },
+                    "randAmount": {
+                        "id": "randAmount",
+                        "type": "number"
+                    },
+                    "cardNumber": {
+                        "id": "cardNumber",
+                        "type": "string"
+                    },
+                    "stationid": {
+                        "id": "stationid",
+                        "type": "string"
+                    },
+                    "stationName": {
+                        "id": "stationName",
+                        "type": "string"
+                    },
+                    "litresDispensed": {
+                        "id": "litresDispensed",
+                        "type": "number"
+                    },
+                    "fuelType": {
+                        "id": "fuelType",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "accountId",
+                    "transactionSource",
+                    "dateOfTransaction",
+                    "timeOfTransaction",
+                    "transactionNumber",
+                    "randAmount",
+                    "cardNumber",
+                    "stationid",
+                    "stationName",
+                    "litresDispensed",
+                    "fuelType"
+                ]
+            }
+
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "accountId" : "12345",
+                "userType" : "RegularDriver",
+                "responseMessage" : "Approved"
+            }
+            
+    + Schema
+
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "id": "/",
+                "type": "object",
+                "properties": {
+                    "accountId": {
+                        "id": "accountId",
+                        "type": "string"
+                    },
+                    "userType": {
+                        "id": "userType",
+                        "type": "string"
+                    },
+                    "responseMessage": {
+                        "id": "responseMessage",
+                        "type": "string",
+                        "enum": [
+                            "Approved",
+                            "Declined"
+                        ]
+                    }
+                },
+                "required": [
+                    "accountId",
+                    "userType",
+                    "responseMessage"
+                ]
+            }
+            
+
++ Response 202 (application/json)
+
+    + Body
+    
+            {
+                "accountId" : "12345",
+                "userType" : "RegularDriver"
+            }
+
++ Response 400 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with the request.",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The object you are searching for does not exist.",
+                    "internalMessage": "Not found",
+                    "code": 404,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        } 
+
+### GET fuel slip transaction [GET]
+
++ Parameters
+    + accountId (optional, string) ... Unique identifier of the user. Must be unique across all systems.
+    
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+              "accountId": "123456",
+              "userType": "RegularDriver",
+              "manualFuelTransactionsList": [
+                {
+                  "transactionSource": "OCR",
+                  "dateOfTransaction": "2015-09-23",
+                  "timeOfTransaction": "14:08:22",
+                  "transactionNumber": "12312313",
+                  "randAmount": 250.76,
+                  "cardNumber": "123456****1234",
+                  "stationid": "1",
+                  "stationName": "Total Midrand",
+                  "litresDispensed": 20.87,
+                  "fuelType": "Eco Diesel 95",
+                  "status": "Open"
+                },
+                {
+                  "transactionSource": "OCR",
+                  "dateOfTransaction": "2015-09-23",
+                  "timeOfTransaction": "14:08:22",
+                  "transactionNumber": "12312313",
+                  "randAmount": 250.76,
+                  "cardNumber": "123456****1234",
+                  "stationid": "1",
+                  "stationName": "Total Midrand",
+                  "litresDispensed": 20.87,
+                  "fuelType": "Eco Diesel 95",
+                  "status": "Approved"
+                },
+                {
+                  "transactionSource": "OCR",
+                  "dateOfTransaction": "2015-09-23",
+                  "timeOfTransaction": "14:08:22",
+                  "transactionNumber": "12312313",
+                  "randAmount": 250.76,
+                  "cardNumber": "123456****1234",
+                  "stationid": "1",
+                  "stationName": "Total Midrand",
+                  "litresDispensed": 20.87,
+                  "fuelType": "Eco Diesel 95",
+                  "status": "Declined"
+                }
+              ]
+            }
+
+    + Schema
+    
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "id": "/",
+                "type": "object",
+                "properties": {
+                    "accountId": {
+                        "id": "accountId",
+                        "type": "string"
+                    },
+                    "userType": {
+                        "id": "userType",
+                        "type": "string"
+                    },
+                    "manualFuelTransactionsList": {
+                        "id": "manualFuelTransactionsList",
+                        "type": "array",
+                        "items": {
+                            "id": "2",
+                            "type": "object",
+                            "properties": {
+                                "transactionSource": {
+                                    "id": "transactionSource",
+                                    "type": "string"
+                                },
+                                "dateOfTransaction": {
+                                    "id": "dateOfTransaction",
+                                    "type": "string"
+                                },
+                                "timeOfTransaction": {
+                                    "id": "timeOfTransaction",
+                                    "type": "string"
+                                },
+                                "transactionNumber": {
+                                    "id": "transactionNumber",
+                                    "type": "string"
+                                },
+                                "randAmount": {
+                                    "id": "randAmount",
+                                    "type": "number"
+                                },
+                                "cardNumber": {
+                                    "id": "cardNumber",
+                                    "type": "string"
+                                },
+                                "stationid": {
+                                    "id": "stationid",
+                                    "type": "string"
+                                },
+                                "stationName": {
+                                    "id": "stationName",
+                                    "type": "string"
+                                },
+                                "litresDispensed": {
+                                    "id": "litresDispensed",
+                                    "type": "number"
+                                },
+                                "fuelType": {
+                                    "id": "fuelType",
+                                    "type": "string"
+                                },
+                                "status": {
+                                    "id": "status",
+                                    "type": "string",
+                                    "enum": [
+                                        "Open",
+                                        "Approved",
+                                        "Declined"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "required": [
+                    "accountId",
+                    "userType",
+                    "manualFuelTransactionsList"
+                ]
+            }
+
++ Response 400 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with the request.",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The object you are searching for does not exist.",
+                    "internalMessage": "Not found",
+                    "code": 404,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        } 
+
+# Group AS400 Interfaces
+
+## Get list of ammended policies [/userPolicy/as400/]
+This service will return the user policies that need to be ammended on the ESB, Entelect Encentivise and DriveFactor
+
+### Retrieve a user policy ammendment list [GET]
+
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "policyList" : [
+                    {
+                        "policyNumber": "A1234"
+                    },
+                    {
+                        "policyNumber": "A1235"
+                    },
+                    {
+                        "policyNumber": "A1236"
+                    }
+                ]
+                
+            }
+            
++ Response 400 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with the request.",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The object you are searching for does not exist.",
+                    "internalMessage": "Not found",
+                    "code": 404,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        } 
+        
+## Set policy as ammended [/userPolicy/as400/setRemoveAmendedPolicy]
+This service will allow the ESB to inform the As400 system that a policy ammendment has been processed by the ESB and that the AS400 can remove this from the list of policies to be ammended.
+
+### Set user policy ammendment completed [POST]
+
++ Request (application/json)
+
+    + Header
+    
+             Authorization: Basic dGVzdDpwYXNzd29yZDE=
+             Accept: application/json
+
+    + Schema
+    
+            {
+              "type": "object",
+              "properties": {
+                "policyNumber": {
+                  "type": "string",
+                  "required" : true
+                }
+              }
+            }
+
+
+    + Body
+    
+            {
+                "policyNumber": "123456"
+            }
+    
+
++ Response 200 (application/json)
+
+    + Body
+            
+            {
+                "status": "1"
+            }
+
++ Response 400 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with the request.",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The object you are searching for does not exist.",
+                    "internalMessage": "Not found",
+                    "code": 404,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        } 
+
+## Get user policy detail [/userPolicy/as400/{policyNumber}/ws_getpolicyandriskdetails]
+
+### Retrieve policy detail for a specific policy [GET]
+This service will retrieve the policy details for a specific policy number
+
++ Parameters
+    + policyNumber (required, string) ... Unique identifier of the policy. Must be unique across all systems.
+   
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+              "POLICY": {
+                "OTHERCOVERCOUNT": 0.0,
+                "POLICYCANCELLATIONDATE": "0001-01-01",
+                "POLICYCOMMENCEMENTDATE": "2015-02-17",
+                "POLICYHOLDERID": "7510295971189",
+                "POLICYHOLDERMOBILENUMBER": "0781231231",
+                "POLICYHOLDERNAME": "Tester",
+                "POLICYHOLDERSURNAME": "Tester",
+                "POLICYLASTCLAIMDATE": "0001-01-01",
+                "POLICYSTATUS": "",
+                "PREMIUMUPTODATE": "Y",
+                "RISKLIST": [
+                  {
+                    "RISKID": {
+                      "RISKBANKDETAILS": {
+                        "BANKACCOUNTHOLDERNAME": "Mr T Tester",
+                        "BANKACCOUNTTYPE": "Credit Card",
+                        "BANKBRANCHCODE": "999998",
+                        "BankAccountNumber": "5454545454545454",
+                        "BankName": "Mastercard Credit Card"
+                      },
+                      "RISKBUYUPOPTIONYN": "N",
+                      "RISKCANCELLATIONDATE": "0001-01-01",
+                      "RISKCOMMENCEMENTDATE": "2015-02-17",
+                      "RISKCOVERTYPE": "Comprehensive",
+                      "RISKLASTCLAIMDATE": "0001-01-01",
+                      "RISKPREMIUM": 477.15,
+                      "RISKSEQUENCEID": 1.0,
+                      "RISKUSERID": "7510295971189",
+                      "RISKUSERMOBILENUMBER": "0781231231",
+                      "RISKUSERNAME": "Tester",
+                      "RISKUSERSURNAME": "Tester",
+                      "RISKVEHICLEREGISTRATIONNUMBER": "TBC",
+                      "RiskType": "Motor"
+                    }
+                  },
+                  {
+                    "RISKID": {
+                      "RISKBANKDETAILS": {
+                        "BANKACCOUNTHOLDERNAME": "Mr T Tester",
+                        "BANKACCOUNTTYPE": "Credit Card",
+                        "BANKBRANCHCODE": "999998",
+                        "BankAccountNumber": "5454545454545454",
+                        "BankName": "Mastercard Credit Card"
+                      },
+                      "RISKBUYUPOPTIONYN": "N",
+                      "RISKCANCELLATIONDATE": "0001-01-01",
+                      "RISKCOMMENCEMENTDATE": "2015-02-17",
+                      "RISKCOVERTYPE": "Comprehensive",
+                      "RISKLASTCLAIMDATE": "0001-01-01",
+                      "RISKPREMIUM": 935.13,
+                      "RISKSEQUENCEID": 2.0,
+                      "RISKUSERID": "7409040670180",
+                      "RISKUSERMOBILENUMBER": "0781231233",
+                      "RISKUSERNAME": "James",
+                      "RISKUSERSURNAME": "Tester",
+                      "RISKVEHICLEREGISTRATIONNUMBER": "TBC",
+                      "RiskType": "Motor"
+                    }
+                  },
+                  {
+                    "RISKID": {
+                      "RISKBANKDETAILS": {
+                        "BANKACCOUNTHOLDERNAME": "Mr T Tester",
+                        "BANKACCOUNTTYPE": "Credit Card",
+                        "BANKBRANCHCODE": "999998",
+                        "BankAccountNumber": "5454545454545454",
+                        "BankName": "Mastercard Credit Card"
+                      },
+                      "RISKBUYUPOPTIONYN": "N",
+                      "RISKCANCELLATIONDATE": "0001-01-01",
+                      "RISKCOMMENCEMENTDATE": "2015-02-17",
+                      "RISKCOVERTYPE": "Comprehensive",
+                      "RISKLASTCLAIMDATE": "0001-01-01",
+                      "RISKPREMIUM": 416.8,
+                      "RISKSEQUENCEID": 3.0,
+                      "RISKUSERID": "7410068982085",
+                      "RISKUSERMOBILENUMBER": "0783434343",
+                      "RISKUSERNAME": "Stewart",
+                      "RISKUSERSURNAME": "Tester",
+                      "RISKVEHICLEREGISTRATIONNUMBER": "TBC",
+                      "RiskType": "Motor"
+                    }
+                  },
+                  {
+                    "RISKID": {
+                      "RISKBANKDETAILS": {
+                        "BANKACCOUNTHOLDERNAME": "Mr T Tester",
+                        "BANKACCOUNTTYPE": "Credit Card",
+                        "BANKBRANCHCODE": "999998",
+                        "BankAccountNumber": "5454545454545454",
+                        "BankName": "Mastercard Credit Card"
+                      },
+                      "RISKBUYUPOPTIONYN": "N",
+                      "RISKCANCELLATIONDATE": "0001-01-01",
+                      "RISKCOMMENCEMENTDATE": "2015-02-17",
+                      "RISKCOVERTYPE": "Comprehensive",
+                      "RISKLASTCLAIMDATE": "0001-01-01",
+                      "RISKPREMIUM": 83.24,
+                      "RISKSEQUENCEID": 4.0,
+                      "RISKUSERID": "7409040670180",
+                      "RISKUSERMOBILENUMBER": "0781231233",
+                      "RISKUSERNAME": "James",
+                      "RISKUSERSURNAME": "Tester",
+                      "RISKVEHICLEREGISTRATIONNUMBER": "TBC",
+                      "RiskType": "Motor"
+                    }
+                  },
+                ],
+                "PolicyCompany": "",
+                "PolicyNumber": "928005086|4SlZEqWZbFhOx8Y2pdg65A2",
+                "TotalPremium": 2896.22
+              }
+            }
+            
+            
+    + Schema
+    
+            {
+              "POLICY": {
+                "OTHERCOVERCOUNT": "Decimal",
+                "POLICYCANCELLATIONDATE": "String",
+                "POLICYCOMMENCEMENTDATE": "String",
+                "POLICYHOLDERID": "String",
+                "POLICYHOLDERMOBILENUMBER": "String",
+                "POLICYHOLDERNAME": "String",
+                "POLICYHOLDERSURNAME": "String",
+                "POLICYLASTCLAIMDATE": "String",
+                "POLICYSTATUS": "String",
+                "PREMIUMUPTODATE": "String",
+                "RISKLIST": [
+                  {
+                    "RISKID": {
+                      "RISKBANKDETAILS": {
+                        "BANKACCOUNTHOLDERNAME": "String",
+                        "BANKACCOUNTTYPE": "String",
+                        "BANKBRANCHCODE": "String",
+                        "BankAccountNumber": "String",
+                        "BankName": "String"
+                      },
+                      "RISKBUYUPOPTIONYN": "String",
+                      "RISKCANCELLATIONDATE": "String",
+                      "RISKCOMMENCEMENTDATE": "String",
+                      "RISKCOVERTYPE": "String",
+                      "RISKLASTCLAIMDATE": "String",
+                      "RISKPREMIUM": "Decimal",
+                      "RISKSEQUENCEID": "Decimal",
+                      "RISKUSERID": "String",
+                      "RISKUSERMOBILENUMBER": "String",
+                      "RISKUSERNAME": "String",
+                      "RISKUSERSURNAME": "String",
+                      "RISKVEHICLEREGISTRATIONNUMBER": "String",
+                      "RiskType": "String"
+                    }
+                  }
+                ],
+                "PolicyCompany": "String",
+                "PolicyNumber": "String|Ib5Z_bgXYN8CCPNw4vxmUA2",
+                "TotalPremium": "Decimal"
+              }
+            }
+
++ Response 400 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with the request.",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The object you are searching for does not exist.",
+                    "internalMessage": "Not found",
+                    "code": 404,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        } 
+
+## Get user policy list [/userPolicy/as400/{idNumber}/getPolicyListByIdnumber]
+
+### Retrieve policy list for a specific user [GET]
+This service will retrieve a list of policies where the user is associated with.
+
++ Parameters
+    + idNumber (required, string) ... Unique identifier of the policy. Must be unique across all systems.
+   
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "policyHolderName": "Joe",
+                "policyHolderSurname": "Bloggs",
+                "policyList": [
+                    {
+                        "policyNumber": "String|Ib5Z_bgXYN8CCPNw4vxmUA2"
+                    }
+                ],
+                "status": "1"
+            }
+            
+    + Schema
+
+            {
+              "POLICYHOLDERNAME": "String",
+              "POLICYHOLDERSURNAME": "String",
+              "POLICYLIST": [
+                {
+                  "PolicyNumber": "String|Ib5Z_bgXYN8CCPNw4vxmUA2"
+                }
+              ],
+              "Status": "Decimal"
+            }   
+
++ Response 400 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with the request.",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The object you are searching for does not exist.",
+                    "internalMessage": "Not found",
+                    "code": 404,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        } 
+        
+# Group DriveFactorOwnedAPI
+
+## Update DF User [/v1/partner/telesure/esb/bot/accounts/sync]
+This operation will update a users data on DriveFactor
+
+### Update user [POST]
+
++ Request (application/json)
+
+    + Body
+    
+            {
+                "userBiographicalInformation": {
+                    "firstName": "Joe",
+                    "lastName": "Bloggs",
+                    "contactnumber": "0111234567",
+                    "rsaId": "1234567890123",
+                    "emailAddress": "someone@somewhere.com"
+                },
+                "driveFactorInformation": {
+                    "driveFactorAccountId": "100",
+                    "userType": "RegularDriver"
+                },
+                "policyList": []
+            }
+
++ Response 200 (application/json)
+
++ Response 500 (application/json)
