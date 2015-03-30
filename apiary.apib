@@ -122,7 +122,7 @@ This payload will register either a PolicyHolder, Regular Driver, Policy Driver 
                 "errors": [
                     {
                         "userMessage": "DuplicateUser",
-                        "internalMessage": "Conflict",
+                        "internalMessage": "accountId",
                         "code": 409,
                         "moreInfo": ""
                     }
@@ -145,11 +145,13 @@ This payload will register either a PolicyHolder, Regular Driver, Policy Driver 
                     "properties": {
                       "userMessage": {
                         "id": "userMessage",
-                        "type": "string"
+                        "type": "string",
+                        "enum" : ["DuplicateUser","DuplicateEmailAddress","DuplicateRSAID"]
                       },
                       "internalMessage": {
                         "id": "internalMessage",
-                        "type": "string"
+                        "type": "string",
+                        "enum" : ["rsaId","accountId","emailAddress"]
                       },
                       "code": {
                         "id": "code",
@@ -620,20 +622,20 @@ This service will allow an external system to update a users detail. This servic
             x-easyearn-usertype: RegularDriver
 
     + Body
-    
+  
             {
                 "errors": [
                     {
-                        "userMessage": "Email address used",
-                        "internalMessage": "Conflict",
+                        "userMessage": "DuplicateEmailAddress",
+                        "internalMessage": "emailAddress",
                         "code": 409,
                         "moreInfo": ""
                     }
                 ]
             }
-            
-    + Schema
 
+    + Schema
+    
             {
               "$schema": "http://json-schema.org/draft-04/schema#",
               "id": "/",
@@ -648,11 +650,13 @@ This service will allow an external system to update a users detail. This servic
                     "properties": {
                       "userMessage": {
                         "id": "userMessage",
-                        "type": "string"
+                        "type": "string",
+                        "enum" : ["DuplicateEmailAddress","DuplicateRSAID"]
                       },
                       "internalMessage": {
                         "id": "internalMessage",
-                        "type": "string"
+                        "type": "string",
+                        "enum" : ["rsaId","emailAddress"]
                       },
                       "code": {
                         "id": "code",
@@ -679,8 +683,7 @@ This service will allow an external system to update a users detail. This servic
                 "errors"
               ]
             }
-    
-
+         
 + Response 405 (application/json)
 
         {
@@ -1140,16 +1143,69 @@ Responsible System Analyst : Andre <br>
             
 + Response 409 (application/json)
 
-        {
-            "errors": [
-                {
-                    "userMessage": "Conflict found on this card that was captured",
-                    "internalMessage": "Bad Request",
-                    "code": 409,
-                    "moreInfo": ""
+    + Body
+    
+            {
+                "errors": [
+                    {
+                        "userMessage": "DuplicateCard",
+                        "internalMessage": "cardNumber",
+                        "code": 409,
+                        "moreInfo": ""
+                    }
+                ]
+            }
+            
+    + Schema
+    
+            {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "id": "/",
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "id": "errors",
+                  "type": "array",
+                  "items": {
+                    "id": "0",
+                    "type": "object",
+                    "properties": {
+                      "userMessage": {
+                        "id": "userMessage",
+                        "type": "string",
+                        "enum" : ["DuplicateCard"]
+                      },
+                      "internalMessage": {
+                        "id": "internalMessage",
+                        "type": "string",
+                        "enum" : ["cardNumber"]
+                      },
+                      "code": {
+                        "id": "code",
+                        "type": "integer"
+                      },
+                      "moreInfo": {
+                        "id": "moreInfo",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "userMessage",
+                      "internalMessage",
+                      "code",
+                      "moreInfo"
+                    ]
+                  },
+                  "required": [
+                    "0"
+                  ]
                 }
-            ]
-        }
+              },
+              "required": [
+                "errors"
+              ]
+            }
+        
 
 + Response 400 (application/json)
 
@@ -3483,7 +3539,8 @@ This interface supports the creation and retrieval of manual fuel slips. These o
                 "litresDispensed" : 20.87,
                 "fuelType" : "Eco Diesel 95",
                 "uploadLat" : "-24.90",
-                "uploadLong" : "24.95"
+                "uploadLong" : "24.95",
+                "fuelslipimageurl" : ""
             }
             
     + Schema
@@ -3559,9 +3616,15 @@ This interface supports the creation and retrieval of manual fuel slips. These o
                         "id": "uploadLong",
                         "required": false,
                         "type": "string"
+                    },
+                    "fuelslipimageurl": {
+                        "id": "fuelslipimageurl",
+                        "type": "string",
+                        "required": true
                     }
                 }
             }
+            
 
 + Response 201 (application/json)
 
