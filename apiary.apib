@@ -1250,12 +1250,16 @@ Responsible System Analyst : Andre <br>
         } 
 
 
-## User refer friend [/user/referFriend]
+## User refer friend [/user/{accountId}/referFriend]
+Responsible Systems Analyst: <b>Liam Hederman</b> <br/>
+Sprint: <b>Telematics Dashboard</b> <br/>
+
 This service will be used by an external calling system when a friend needs to be referred to use the DriveFactor interface.
 
 ### Set refer a friend [POST]
 
-+ Request (application/json)
+
++ Request
 
     + Header
     
@@ -1265,62 +1269,59 @@ This service will be used by an external calling system when a friend needs to b
     + Body
     
             {
-               "friendFirstName" : "Joe",
-               "friendLastName" : "Bloggs",
-               "friendEmailAddress" : "someone@somewhere.com",
-               "friendContactMobileNumber" : "0821234567",
-               "accountId" : "123456"
+                "accountId": "abc123",
+                "firstName": "Joe",
+                "lastName": "Bloggs",
+                "contactNumber": "0821231234",
+                "emailAddress": ""
             }
 
     + Schema
-    
+        
             {
-                "$schema": "http://json-schema.org/draft-04/schema#",
-                "id": "/",
-                "type": "object",
-                "properties": {
-                    "friendFirstName": {
-                        "id": "friendFirstName",
-                        "type": "string"
-                    },
-                    "friendLastName": {
-                        "id": "friendLastName",
-                        "type": "string"
-                    },
-                    "friendEmailAddress": {
-                        "id": "friendEmailAddress",
-                        "type": "string"
-                    },
-                    "friendContactMobileNumber": {
-                        "id": "friendContactMobileNumber",
-                        "type": "string"
-                    },
-                    "accountId": {
-                        "id": "accountId",
-                        "type": "string"
-                    }
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "id": "/",
+              "type": "object",
+              "properties": {
+                "accountId": {
+                  "id": "accountId",
+                  "type": "string",
+                  "required":true
                 },
-                "required": [
-                    "friendFirstName",
-                    "friendLastName",
-                    "friendEmailAddress",
-                    "friendContactMobileNumber",
-                    "accountId"
-                ]
+                "firstName": {
+                  "id": "firstName",
+                  "type": "string",
+                  "required":true
+                },
+                "lastName": {
+                  "id": "lastName",
+                  "type": "string",
+                  "required":true
+                },
+                "contactNumber": {
+                  "id": "contactNumber",
+                  "type": "string",
+                  "required":true
+                },
+                "emailAddress": {
+                  "id": "email",
+                  "type": "string",
+                  "required":false
+                }
+              }
             }
+    
 
 + Response 200 (application/json)
 
     + Header
     
             x-easyearn-accountId: 12312313
-            x-easyearn-usertype: RegularDriver
 
     + Body
     
             {
-                "accountId": "123456",
-                "userType": "RegularDriver"
+                "accountId": "123456"
             }
  
     + Schema
@@ -1334,21 +1335,8 @@ This service will be used by an external calling system when a friend needs to b
                         "id": "accountId",
                         "type": "string"
                     },
-                    "userType": {
-                        "id": "userType",
-                        "type": "string",
-                        "enum": [
-                            "RegularDriver",
-                            "PolicyHolder",
-                            "Aspirant",
-                            "PolicyDriver"
-                        ]
-                    }
-                },
-                "required": [
-                    "accountId",
-                    "userType"
-                ]
+                    
+                }
             }
   
 + Response 400 (application/json)
@@ -1389,6 +1377,19 @@ This service will be used by an external calling system when a friend needs to b
                 }
             ]
         }
+        
++ Response 409 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "This friend has already been referred.",
+                    "internalMessage": "Conflict",
+                    "code": 409,
+                    "moreInfo": ""
+                }
+            ]
+        } 
 
 + Response 503 (application/json)
 
@@ -1402,10 +1403,14 @@ This service will be used by an external calling system when a friend needs to b
                 }
             ]
         } 
+        
             
 
 
-## User telematic score [/users/telematicScore]
+## User telematic score [/users/{accountId}/score]
+Responsible Systems Analyst: <b>Liam Hederman</b><br/>
+Sprint: <b>Telematics Dashboard</b><br/>
+<br/>
 This service will allow a calling system to POST or PUT a driver score for a specific driver for a specific month.
 
 ### Set a users drivers score [POST]
@@ -1420,43 +1425,65 @@ This service will allow a calling system to POST or PUT a driver score for a spe
     + Body
             
             {
-                "accountId" : "1234",
-                "calculatedScore" : "Poor Driving",
-                "calculatedScoreDate" : "12/01/2014"
+            
+                "scoreType":27,
+                "scoreVersion":1,
+                "score":5.0,
+                "date":"2015-03-30T10:01:41Z",
+                "ratingLevel":2,
+                "ratingDescription":"Neutral", 
+                "colorCodeHex": "d9c2b4", 
+                "version": 1
             }
     
     + Schema
     
             {
-                "$schema": "http://json-schema.org/draft-04/schema#",
-                "id": "/",
-                "type": "object",
-                "properties": {
-                    "accountId": {
-                        "id": "accountId",
-                        "type": "string"
-                    },
-                    "calculatedScore": {
-                        "id": "calculatedScore",
-                        "type": "string",
-                        "enum": [
-                            "Poor Driving",
-                            "Average Driving",
-                            "Good Driving",
-                            "Excellent Driving",
-                            "Exceptional Driving"
-                        ]
-                    },
-                    "calculatedScoreDate": {
-                        "id": "calculatedScoreDate",
-                        "type": "string"
-                    }
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "id": "/",
+              "type": "object",
+              "properties": {
+                "scoreType": {
+                  "id": "scoreType",
+                  "type": "integer",
+                  "required":true
                 },
-                "required": [
-                    "accountId",
-                    "calculatedScore",
-                    "calculatedScoreDate"
-                ]
+                "scoreVersion": {
+                  "id": "scoreVersion",
+                  "type": "integer",
+                  "required":true
+                },
+                "score": {
+                  "id": "score",
+                  "type": "double,
+                  "required":true
+                },
+                "date": {
+                  "id": "date",
+                  "type": "string",
+                  "required":true
+                },
+                "ratingLevel": {
+                  "id": "ratingLevel",
+                  "type": "integer",
+                  "required":true
+                },
+                "ratingDescription": {
+                  "id": "ratingDescription",
+                  "type": "string",
+                  "required":true
+                },
+                "colorCodeHex": {
+                  "id": "colorCodeHex",
+                  "type": "string",
+                  "required":true
+                },
+                "version": {
+                  "id": "version",
+                  "type": "integer",
+                  "required":true
+                }
+              }
             }
             
             
@@ -1569,168 +1596,7 @@ This service will allow a calling system to POST or PUT a driver score for a spe
         } 
         
 
-### Update a users drivers score [PUT]
 
-+ Request (application/json)
-
-    + Header
-    
-             Authorization: Basic dGVzdDpwYXNzd29yZDE=
-             Accept: application/json
-
-    + Body
-            
-            {
-                "accountId" : "1234",
-                "calculatedScore" : "Poor Driving",
-                "calculatedScoreDate" : "12/01/2014"
-            }
-    
-    + Schema
-    
-                {
-                                "$schema": "http://json-schema.org/draft-04/schema#",
-                                "id": "/",
-                                "type": "object",
-                                "properties": {
-                                    "accountId": {
-                                        "id": "accountId",
-                                        "type": "string"
-                                    },
-                                    "calculatedScore": {
-                                        "id": "calculatedScore",
-                                        "type": "string",
-                                        "enum": [
-                                            "Poor Driving",
-                                            "Average Driving",
-                                            "Good Driving",
-                                            "Excellent Driving",
-                                            "Exceptional Driving"
-                                        ]
-                                    },
-                                    "calculatedScoreDate": {
-                                        "id": "calculatedScoreDate",
-                                        "type": "string"
-                                    }
-                                },
-                                "required": [
-                                    "accountId",
-                                    "calculatedScore",
-                                    "calculatedScoreDate"
-                                ]
-                            }
-            
-            
-+ Response 200 (application/json)
-
-    + Header
-    
-            x-easyearn-accountId: 12312313
-            x-easyearn-usertype: RegularDriver
-
-    + Body
-    
-            {
-                "accountId": "123456",
-                "userType": "RegularDriver"
-            }
-
-    + Schema
-
-                {
-                    "$schema": "http://json-schema.org/draft-04/schema#",
-                    "id": "/",
-                    "type": "object",
-                    "properties": {
-                        "accountId": {
-                            "id": "accountId",
-                            "type": "string"
-                        },
-                        "userType": {
-                            "id": "userType",
-                            "type": "string",
-                            "enum": [
-                                "RegularDriver",
-                                "PolicyHolder",
-                                "Aspirant",
-                                "PolicyDriver"
-                            ]
-                        }
-                    },
-                    "required": [
-                        "accountId",
-                        "userType"
-                    ]
-                }
-
-+ Response 409 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "You have already submitted a score for this user for your specified time.",
-                    "internalMessage": "Conflict",
-                    "code": 409,
-                    "moreInfo": ""
-                }
-            ]
-        }
-
-
-
-+ Response 400 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "Something is wrong with the request.",
-                    "internalMessage": "Bad Request",
-                    "code": 400,
-                    "moreInfo": ""
-                }
-            ]
-        }
-
-+ Response 404 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "The object you are searching for does not exist.",
-                    "internalMessage": "Not found",
-                    "code": 404,
-                    "moreInfo": ""
-                }
-            ]
-        }
-
-+ Response 401 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "You are not authorized to use this service.",
-                    "internalMessage": "Unauthorized",
-                    "code": 401,
-                    "moreInfo": ""
-                }
-            ]
-        }
-
-+ Response 503 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "The requested resource is not available.",
-                    "internalMessage": "Service Unavailable",
-                    "code": 503,
-                    "moreInfo": ""
-                }
-            ]
-        } 
-
-      
 ## User assistance [/users/{accountId}/userAssistance]
 Responsible System Analyst : Andre <br>
 Request Assistance from either FirstManagement or EuropAssist
@@ -2133,6 +1999,8 @@ Get users fuel transactions
         } 
         
 ## Get users activities [/users/{accountId}/userActivities{?activityFromDate,activityToDate}]
+Responsible Systems Analyst: <b>Liam Hederman</b><br/>
+Sprint: <b>Telematics Dashboard</b><br/>
 Get users activities. By default this service will return only the activities for the current month which is determined by the ESB sysdate. When a date range is supplied, the response will filter activities where the activity date is between the from and to date.
 
 ### Get users activities [GET]
@@ -2156,26 +2024,65 @@ Get users activities. By default this service will return only the activities fo
                 "activityList": [
                     {
                         "activityId": "001",
-                        "activityName": "Home Contents Cover",
-                        "activityChapter": "Insure With Us",
-                        "possiblePoints": "50",
+                        "activityName": "driveWellPoor",
+                        "activityDescription","Rating on driving behaviour for the month - poor",
+                        "activityChapter": "Drive Well",
+                        "possiblePoints": "600",
                         "actualPoints": "50"
                     },
                     {
-                        "activityId": "002",
-                        "activityName": "Building Cover",
+                        "activityId": "007",
+                        "activityName": "comprehensiveBuilding",
+                        "activityDescription","Awarded when a user has comprehensive building insurance",
                         "activityChapter": "Insure With Us",
                         "possiblePoints": "50",
-                        "actualPoints": "0"
-                    },
-                    {
-                        "activityId": "003",
-                        "activityName": "Verify Policy Online",
-                        "activityChapter": "Keep Us Informed",
-                        "possiblePoints": "100",
-                        "actualPoints": "0"
+                        "actualPoints": "50"
                     }
                 ]
+            }
+            
+    + Schema
+    
+            {
+                  "$schema": "http://json-schema.org/draft-04/schema#",
+                  "id": "http://jsonschema.net",
+                  "type": "object",
+                  "properties": {
+                    "activityList": {
+                      "id": "http://jsonschema.net/activityList",
+                      "type": "array",
+                      "items": [
+                        {
+                          "id": "http://jsonschema.net/activityList/0",
+                          "type": "object",
+                          "properties": {
+                            "activityId": {
+                              "id": "http://jsonschema.net/activityList/0/activityId",
+                              "type": "string"
+                            },
+                            "activityName": {
+                              "id": "http://jsonschema.net/activityList/0/activityName",
+                              "type": "string"
+                            },
+                            "activityDescription": {
+                              "id": "http://jsonschema.net/activityList/0/activityDescription",
+                              "type": "string"
+                            },
+                            "activityChapter": {
+                              "id": "http://jsonschema.net/activityList/0/activityChapter",
+                              "type": "string"
+                            },
+                            "possiblePoints": {
+                              "id": "http://jsonschema.net/activityList/0/possiblePoints",
+                              "type": "string"
+                            },
+                            "actualPoints": {
+                              "id": "http://jsonschema.net/activityList/0/actualPoints",
+                              "type": "string"
+                            }
+                          }
+                        }
+                    }
             }
        
 + Response 400 (application/json)
@@ -2230,8 +2137,155 @@ Get users activities. By default this service will return only the activities fo
             ]
         } 
         
+## Set users activities [/users/{accountId}/userActivity]
+
+### Set users activities [POST]
+Responsible System Analyst : <b>Liam Hederman</b> <br>
+Sprint: <b>Telematics Dashboard</b>
+This payload will add or update an activity for a PolicyHolder, Regular Driver, Policy Driver or an Aspirant Driver <br><br>
+**driveWellPoor** - Drive Well. Rating on driving behaviour for the month - poor<br/>
+**driveWellAverage** - Drive Well. Rating on driving behaviour for the month - average<br/>
+**driveWellGood** - Drive Well. Rating on driving behaviour for the month - good<br/>
+**driveWellExcellent** - Drive Well. Rating on driving behaviour for the month - excellent<br/>
+**driveWellExceptional** - Drive Well. Rating on driving behaviour for the month - exceptional<br/>
+**comprehensiveVehicle** - Comprehensive Vehicle. Awarded when a user has comprehensive vehicle insurance<br/>
+**comprehensiveBuilding** - Comprehensive Buildings. Awarded when a user has comprehensive building insurance<br/>
+**comprehensiveHomeContents** - Comprehensive Home contents. Awarded when a user has comprehensive home contents<br/>
+**otherProducts** - Other Products. Awarded when a user has other products<br/>
+**multiProduct** - Multi-product Bonus Points. Awarded when a user has 3 or more products<br/>
+**stayWithUs** - Stay With Us. Awarded based on the number of years a policy has been active<br/>
+**verifyPolicy** - Verify Policy Information . Declared on the app<br/>
+**infoOnline** - Manage Policy Info Online . For a later phase when online provides more functionaility<br/>
+**onlineSurvey** - Online Survey. Survey taken through the app<br/>
+**experienceRating** - Experience Rating. Survey taken through the app<br/>
+**referFriend** - Refer a friend. Friend referred through the app<br/>
+**drivingCourse** - Approved Driving Course. Captured on the App<br/>
+**vehicleService** - Vehicle Service. Captured on the App<br/>
+**geyserInspection** - Geyser Inspection. Captured on the App<br/>
+**homeContentsInventory** - Home Contents Inventory. Excluded for phase 1<br/>
+**riskAssessment** - Online Risk Assessment. Captured on the App<br/>
+**claimsFree** - Stay Claims Free. Provided by the policy/risk from AS400 on the user<br/>
+
++ Request
+
+    + Header
+    
+             Authorization: Basic dGVzdDpwYXNzd29yZDE=
+             Accept: application/json
+
+    + Body
+    
+            {
+                "accountId": "abc123",
+                "activityName": "onlineSurvey",
+                "activityDate": "20015-04-05T14:30Z",
+                "activityPoints": "50",
+                "maximumPoints": "50"
+            }
+
+    + Schema
+        
+            {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "id": "/",
+              "type": "object",
+              "properties": {
+                "accountId": {
+                  "id": "accountId",
+                  "type": "string",
+                  "required":true
+                },
+                "activityName": {
+                  "id": "activityName",
+                  "type": "string",
+                  "required":true
+                },
+                "activityDate": {
+                  "id": "activityDate",
+                  "type": "string",
+                  "required":true
+                },
+                "activityPoints": {
+                  "id": "activityPoints",
+                  "type": "string",
+                  "required":true
+                },
+                "maximumPoints": {
+                  "id": "maximumPoints",
+                  "type": "string",
+                  "required":false
+                }
+              }
+            }
+
++ Response 200 (application/json)
+
+    + Header
+        
+            x-easyearn-accountId: 12312313
+        
+    + Body
+    
+            {
+                "activityName":"comprehensiveVehicle"
+            }
+    
++ Response 400 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Something is wrong with the request.",
+                    "internalMessage": "Bad Request",
+                    "code": 400,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The object you are searching for does not exist.",
+                    "internalMessage": "Not found",
+                    "code": 404,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        }   
+        
 ## Get users achievements [/users/{accountId}/userAchievements{?achievementFromDate,achievementToDate}]
-Get users achievements.By default this service will return only the activities for the current month which is determined by the ESB sysdate. When a date range is supplied, the response will filter activities where the achievement date is between the from and to date.
+Responsible Systems Analyst: <b>Liam Hederman</b><br/>
+Sprint: <b>Telematics Dashboard</b><br/><br/>
+Get users achievements.By default this service will return only the activities for the current month which is determined by the ESB sysdate. When a date range is supplied, the response will filter achievements where the achievement date is between the from and to date.
 
 ### Get users achievements [GET]
 
@@ -2251,28 +2305,149 @@ Get users achievements.By default this service will return only the activities f
     + Body
     
             {
-                "rewardTitle": "First Good Month",
-                "achievementList": [
+                "voucherList": [
                     {
-                        "achievementID": "010",
-                        "achievementName": "First 100km",
-                        "achievementSequence": "1",
-                        "archievedYN": "Y"
-                    },
-                    {
-                        "achievementID": "011",
-                        "achievementName": "No Night Driving 3 days",
-                        "achievementSequence": "2",
-                        "archievedYN": "N"
-                    },
-                    {
-                        "achievementID": "012",
-                        "achievementName": "Excellent Driving Score",
-                        "achievementSequence": "3",
-                        "archievedYN": "N"
+                        "voucherGroup":"1",
+                        "voucherDescription":"Getting Started",
+                        "achievementList": [
+                            {
+                                "achievementID": "001",
+                                "achievementName": "register",
+                                "achievementDescription":"Register on the App",
+                                "achievementSequence": "1",
+                                "achievementDateTime": "2015-04-05T14:30Z"
+                            },
+                            {
+                                "achievementID": "002",
+                                "achievementName": "firstTrip",
+                                "achievementDescription":"Take First Trip",
+                                "achievementSequence": "2",
+                                "achievementDateTime": "2015-04-08T12:00Z"
+                            },
+                            {
+                                "achievementID": "003",
+                                "achievementName": "defeatHtoH5Days",
+                                "achievementDescription":"Defeat a Fellow Driver in a head to head over 5 days",
+                                "achievementSequence": "3",
+                                "achievementDateTime": ""
+                            }
+                        ]
                     }
                 ]
             }
+          
+    + Schema
+    
+            {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "id": "http://jsonschema.net",
+              "type": "object",
+              "properties": {
+                "voucherList": {
+                  "id": "http://jsonschema.net/voucherList",
+                  "type": "array",
+                  "items": {
+                    "id": "http://jsonschema.net/voucherList/0",
+                    "type": "object",
+                    "properties": {
+                      "voucherGroup": {
+                        "id": "http://jsonschema.net/voucherList/0/voucherGroup",
+                        "type": "string"
+                      },
+                      "voucherDescription": {
+                        "id": "http://jsonschema.net/voucherList/0/voucherDescription",
+                        "type": "string"
+                      },
+                      "achievementList": {
+                        "id": "http://jsonschema.net/voucherList/0/achievementList",
+                        "type": "array",
+                        "items": [
+                          {
+                            "id": "http://jsonschema.net/voucherList/0/achievementList/0",
+                            "type": "object",
+                            "properties": {
+                              "achievementID": {
+                                "id": "http://jsonschema.net/voucherList/0/achievementList/0/achievementID",
+                                "type": "string"
+                              },
+                              "achievementName": {
+                                "id": "http://jsonschema.net/voucherList/0/achievementList/0/achievementName",
+                                "type": "string"
+                              },
+                              "achievementDescription": {
+                                "id": "http://jsonschema.net/voucherList/0/achievementList/0/achievementDescription",
+                                "type": "string"
+                              },
+                              "achievementSequence": {
+                                "id": "http://jsonschema.net/voucherList/0/achievementList/0/achievementSequence",
+                                "type": "string"
+                              },
+                              "achievementDateTime": {
+                                "id": "http://jsonschema.net/voucherList/0/achievementList/0/achievementDateTime",
+                                "type": "string"
+                              }
+                            }
+                          },
+                          {
+                            "id": "http://jsonschema.net/voucherList/0/achievementList/1",
+                            "type": "object",
+                            "properties": {
+                              "achievementID": {
+                                "id": "http://jsonschema.net/voucherList/0/achievementList/1/achievementID",
+                                "type": "string"
+                              },
+                              "achievementName": {
+                                "id": "http://jsonschema.net/voucherList/0/achievementList/1/achievementName",
+                                "type": "string"
+                              },
+                              "achievementDescription": {
+                                "id": "http://jsonschema.net/voucherList/0/achievementList/1/achievementDescription",
+                                "type": "string"
+                              },
+                              "achievementSequence": {
+                                "id": "http://jsonschema.net/voucherList/0/achievementList/1/achievementSequence",
+                                "type": "string"
+                              },
+                              "achievementDateTime": {
+                                "id": "http://jsonschema.net/voucherList/0/achievementList/1/achievementDateTime",
+                                "type": "string"
+                              }
+                            }
+                          },
+                          {
+                            "id": "http://jsonschema.net/voucherList/0/achievementList/2",
+                            "type": "object",
+                            "properties": {
+                              "achievementID": {
+                                "id": "http://jsonschema.net/voucherList/0/achievementList/2/achievementID",
+                                "type": "string"
+                              },
+                              "achievementName": {
+                                "id": "http://jsonschema.net/voucherList/0/achievementList/2/achievementName",
+                                "type": "string"
+                              },
+                              "achievementDescription": {
+                                "id": "http://jsonschema.net/voucherList/0/achievementList/2/achievementDescription",
+                                "type": "string"
+                              },
+                              "achievementSequence": {
+                                "id": "http://jsonschema.net/voucherList/0/achievementList/2/achievementSequence",
+                                "type": "string"
+                              },
+                              "achievementDateTime": {
+                                "id": "http://jsonschema.net/voucherList/0/achievementList/2/achievementDateTime",
+                                "type": "string"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
     
 
 + Response 400 (application/json)
@@ -2327,61 +2502,82 @@ Get users achievements.By default this service will return only the activities f
             ]
         } 
         
-### Set users achievements [POST]
-Responsible Systems Analyst: Liam Hederman </br>
-Records a new achievement against a user
+## Set users achievements [/users/{accountId}/userAchievements{achievementName,achievementDateTime}]
 
-+ Request (application/json)
+### Set user achievement [POST]
+Responsible System Analyst : <b>Liam Hederman</b> <br>
+Sprint: <b>Telematics Dashboard</b>
+This payload will add or update an achievement for a PolicyHolder, Regular Driver, Policy Driver or an Aspirant Driver <br><br>
+** ID: 1** - Name: register. Description: Register on the App<br/>
+** ID: 2** - Name: firstTrip. Description: Take 1st Trip<br/>
+** ID: 3** - Name: defeatHtoH5Days. Description: Defeat a Fellow Driver in a head to head over 5 days<br/>
+** ID: 4** - Name: under1000kmMonth. Description: Under 1000km driving in a month<br/>
+** ID: 5** - Name: share5Trips. Description: Share 5 trips on social networks<br/>
+** ID: 6** - Name: complete2Tripsin10Days. Description: Complete 2 trips a day for 10 consecutive days<br/>
+** ID: 7** - Name: convinceAFriend. Description: Convince a friend to download the app<br/>
+** ID: 8** - Name: noHarshBraking. Description: Complete 10 consecutive trips with no harsh braking<br/>
+** ID: 9** - Name: exceptionalDriver. Description: Be an Exceptional Driver for 10 Trips<br/>
+** ID: 10** - Name: avoidNightDriving. Description: Avoid Driving at Night for 10 days<br/>
+** ID: 11** - Name: riskAssessment. Description: Complete Online Risk Assessment<br/>
+** ID: 12** - Name: drivingCourse. Description: Complete driving course details<br/>
+** ID: 13** - Name: vehicleService. Description: Complete vehicle service details<br/>
+** ID: 14** - Name: referFriend. Description: Convince a friend to buy a DialDirect policy<br/>
+** ID: 15** - Name: fuelSpend. Description: Buy 100 litres of Total fuel<br/>
+** ID: 16** - Name: driveEfficiently. Description: Drive efficiently, under 10l/100kms<br/>
+
++ Request
+
     + Header
     
-            x-easyearn-accountId: 12312313
-    
+             Authorization: Basic dGVzdDpwYXNzd29yZDE=
+             Accept: application/json
+
     + Body
     
             {
-                "achievementId":"001",
-                "achievementName":"Registered on app",
-                "achievementDateTime":"2007-04-05T14:30Z"
+                "accountId": "abc123",
+                "achievementName": "register",
+                "achievementDateTime": "20015-04-05T14:30Z"
             }
 
     + Schema
-    
+        
             {
               "$schema": "http://json-schema.org/draft-04/schema#",
-              "id": "http://jsonschema.net",
+              "id": "/",
               "type": "object",
               "properties": {
-                "achievementId": {
-                  "id": "achievementId",
+                "accountId": {
+                  "id": "accountId",
                   "type": "string",
                   "required":true
                 },
-                "achievementName": {
+                "activityName": {
                   "id": "achievementName",
                   "type": "string",
                   "required":true
                 },
-                "acievementDateTime": {
+                "activityDate": {
                   "id": "achievementDateTime",
-                  "type": "string"
+                  "type": "string",
                   "required":true
                 }
               }
+            }
 
-+ Response 201 (application/json)
+
++ Response 200 (application/json)
 
     + Header
-    
+        
             x-easyearn-accountId: 12312313
-
+        
     + Body
     
             {
-                "accountId": "123456",
-                "achievementName":"Registered on app"
+                "achievementName":"avoidNightDriving"
             }
     
-
 + Response 400 (application/json)
 
         {
@@ -2420,6 +2616,19 @@ Records a new achievement against a user
                 }
             ]
         }
+        
++ Response 409 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "Duplicate achievement.",
+                    "internalMessage": "Conflict",
+                    "code": 409,
+                    "moreInfo": ""
+                }
+            ]
+        }
 
 + Response 503 (application/json)
 
@@ -2432,7 +2641,7 @@ Records a new achievement against a user
                     "moreInfo": ""
                 }
             ]
-        } 
+        }   
         
 ## User Vouchers [/users/{accountId}/vouchers]
 Responsible Systems Analyst: Liam Hederman
@@ -4262,6 +4471,8 @@ The users set of services at /users has all the required user resources and func
 ## Rewards Profile [/users/{?accountId}/rewardsProfile]
 
 ### Create Rewards Profile from Entelect [POST]
+Responsible Systems Analyst: <b>Liam Hederman</b><br/>
+Sprint: <b>ESB Callback</b><br/>
 This payload will create a new profile of points and cashback limits from Entelect <br><br>
 
 + Request (application/json)
@@ -4278,7 +4489,9 @@ This payload will create a new profile of points and cashback limits from Entele
                 "accountId": "123456",
                 "callbackDateTime": "2013-03-10T10:00:00Z",
                 "currentTier": "2",
+                "tierDescription":"Level 2",
                 "maxPossibleTier": "5",
+                "maxPossiblePoints": "2000",
                 "currentTotalPoints": "750",
                 "rebateLimit": "132.50",
                 "rebatePercentagePerTransaction": "0.1",
@@ -4311,8 +4524,18 @@ This payload will create a new profile of points and cashback limits from Entele
                   "type": "string",
                   "required":true
                 },
+                "tierDescription": {
+                  "id": "tierDescription",
+                  "type": "string",
+                  "required":true
+                },
                 "maxPossibleTier": {
                   "id": "maxPossibleTier",
+                  "type": "string",
+                  "required":true
+                },
+                "maxPossiblePoints": {
+                  "id": "maxPossiblePoints",
                   "type": "string",
                   "required":true
                 },
@@ -4432,14 +4655,18 @@ This payload will create a new profile of points and cashback limits from Entele
         }
         
 
-## Get users cashback transactions [/users/{accountId}/cashbackTransactions]
-Get users cashback transaction from their fuel
+## Get users cashback transactions [/users/{accountId}/cashbackTransactions{?fuelTransactionFrom,fuelTransactionTo}]
+Responsible Systems Analyst: <b>Liam Hederman</b><br/>
+Sprint: <b>Telematics Dashboard</b><br/>
+Get users cashback transaction from their fuel and their service station matched off the merchant number for the transaction
 
 ### Get users fuel transactions [GET]
 
 + Parameters
 
     + accountId (required, number) ... Users unqiue account number from the mobile app
+    + fuelTransactionFrom (required,string) ... Date for the earliest fuel transaction. ISO 8601 UTC format date time.
+    + fuelTransactionTo (required,string) ... date for the latest fuel transaction. ISO 8601 UTC format date time
     
 + Response 200 (application/json)
 
@@ -4454,6 +4681,7 @@ Get users cashback transaction from their fuel
                     {
                         "uid":"abc123",
                         "dateTime": "2007-03-01T13:00:00Z",
+                        "serviceStationName":"Total Northrand",
                         "liters":"50",
                         "amount": "734.56",
                         "cashBackEarned": "36.73"
@@ -4461,6 +4689,7 @@ Get users cashback transaction from their fuel
                     {
                         "uid":"abc124",
                         "dateTime": "2007-03-01T13:00:00Z",
+                        "serviceStationName":"Total Northrand",
                         "liters":"50",
                         "amount": "700.42",
                         "cashBackEarned": "30.75"
@@ -4477,31 +4706,35 @@ Get users cashback transaction from their fuel
               "properties": {
                 "uid": {
                     "id":"uid",
-                    "type":"string"
+                    "type":"string",
+                    "required:true
                 },
                 "dateTime": {
                   "id": "http://jsonschema.net/dateTime",
-                  "type": "string"
+                  "type": "string",
+                    "required:true
+                },
+                "serviceStationName": {
+                  "id": "http://jsonschema.net/dateTime",
+                  "type": "string",
+                    "required:false
                 },
                 "liters": {
                   "id": "http://jsonschema.net/liters",
-                  "type": "string"
+                  "type": "string",
+                    "required:true
                 },
                 "amount": {
                   "id": "http://jsonschema.net/amount",
-                  "type": "string"
+                  "type": "string",
+                    "required:true
                 },
                 "cashBackEarned": {
                   "id": "http://jsonschema.net/cashBackEarned",
-                  "type": "string"
+                  "type": "string",
+                    "required:true
                 }
-              },
-              "required": [
-                "dateTime",
-                "liters",
-                "amount",
-                "cashBackEarned"
-              ]
+              }
             }
     
 + Response 400 (application/json)
