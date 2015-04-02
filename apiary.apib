@@ -5068,3 +5068,161 @@ Redeems a users specific voucher
 
 + Response 200 (application/json)
 
+## POST Fuel Transactions [/users/{accountId}/fuelSpend]
+Post fuel transactions to Entelect when Total, Manual Fuel Slip or the Mobile app sends through fuel transactions.
+
+### Create a fuel transactions  [POST]
+
++ Request (application/json)
+
+
+    + Header
+    
+
+    + Body
+    
+            {
+                "uid": "123456",
+                "transactionDate": "2015-03-26T07:28:27Z",
+                "sequence": "12123GT",
+                "merchantId": "1231231",
+                "merchantName": "Total N3",
+                "amount": 199.25,
+                "litres": 19.22,
+                "source": "Total – TransactionJunction"
+            }   
+          
+
+    + Schema
+    
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "id": "/",
+                "type": "object",
+                "properties": {
+                    "uid": {
+                        "id": "uid",
+                        "type": "string",
+                        "required": true
+                    },
+                    "accountId": {
+                        "id": "accountId",
+                        "type": "string",
+                        "required": true
+                    },
+                    "transactionDate": {
+                        "id": "transactionDate",
+                        "type": "string",
+                        "required": true
+                    },
+                    "reference": {
+                        "id": "reference",
+                        "type": "string",
+                        "required": true
+                    },
+                    "sequence": {
+                        "id": "sequence",
+                        "type": "string",
+                        "required": true
+                    },
+                    "merchantId": {
+                        "id": "merchantId",
+                        "type": "string",
+                        "required": true
+                    },
+                    "merchantName": {
+                        "id": "merchantName",
+                        "type": "string"
+                    },
+                    "amount": {
+                        "id": "amount",
+                        "type": "number",
+                        "required": true
+                    },
+                    "litres": {
+                        "id": "litres",
+                        "type": "number",
+                        "required": true
+                    },
+                    "source": {
+                        "id": "source",
+                        "type": "string",
+                        "required": true,
+                        "enum": [
+                            "Total–TransactionJunction",
+                            "Manual",
+                            "OCR"
+                        ]
+                    }
+                }
+            }
+            
+            
++ Response 200 (application/json)
+
+    + Header
+
+    + Body
+    
+            {
+                "statusDescription": "Approved/RebateReached/PartialApproval",
+                "rebateLitres": 35.9,
+                "uid": "123456",
+                "rebateLimit": 100.98,
+                "rebateRemaining": 120.11,
+                "rebateForTransaction": 30.99
+            }
+            
+    + Schema
+
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "id": "/",
+                "type": "object",
+                "properties": {
+                    "statusDescription": {
+                        "id": "statusDescription",
+                        "type": "string",
+                        "enum": [
+                            "Approved",
+                            "RebateReached",
+                            "PartialApproval"
+                        ]
+                    },
+                    "rebateLitres": {
+                        "id": "rebateLitres",
+                        "type": "number"
+                    },
+                    "uid": {
+                        "id": "uid",
+                        "type": "string"
+                    },
+                    "rebateLimit": {
+                        "id": "rebateLimit",
+                        "type": "number"
+                    },
+                    "rebateRemaining": {
+                        "id": "rebateRemaining",
+                        "type": "number"
+                    },
+                    "rebateForTransaction": {
+                        "id": "rebateForTransaction",
+                        "type": "number"
+                    }
+                },
+                "required": [
+                    "statusDescription",
+                    "rebateLitres",
+                    "uid",
+                    "rebateLimit",
+                    "rebateRemaining",
+                    "rebateForTransaction"
+                ]
+            }
+
++ Response 409 (application/json)
+
+  + Body
+
+  + Schema
+    
