@@ -1269,7 +1269,6 @@ This service will be used by an external calling system when a friend needs to b
     + Body
     
             {
-                "accountId": "abc123",
                 "firstName": "Joe",
                 "lastName": "Bloggs",
                 "contactNumber": "0821231234",
@@ -1283,11 +1282,6 @@ This service will be used by an external calling system when a friend needs to b
               "id": "/",
               "type": "object",
               "properties": {
-                "accountId": {
-                  "id": "accountId",
-                  "type": "string",
-                  "required":true
-                },
                 "firstName": {
                   "id": "firstName",
                   "type": "string",
@@ -2025,7 +2019,7 @@ Get users activities. By default this service will return only the activities fo
                     {
                         "activityId": "001",
                         "activityName": "driveWellPoor",
-                        "activityDescription","Rating on driving behaviour for the month - poor",
+                        "activityDescription":"Rating on driving behaviour for the month - poor",
                         "activityChapter": "Drive Well",
                         "possiblePoints": "600",
                         "actualPoints": "50"
@@ -2033,7 +2027,7 @@ Get users activities. By default this service will return only the activities fo
                     {
                         "activityId": "007",
                         "activityName": "comprehensiveBuilding",
-                        "activityDescription","Awarded when a user has comprehensive building insurance",
+                        "activityDescription":"Awarded when a user has comprehensive building insurance",
                         "activityChapter": "Insure With Us",
                         "possiblePoints": "50",
                         "actualPoints": "50"
@@ -2176,11 +2170,10 @@ This payload will add or update an activity for a PolicyHolder, Regular Driver, 
     + Body
     
             {
-                "accountId": "abc123",
                 "activityName": "onlineSurvey",
-                "activityDate": "20015-04-05T14:30Z",
-                "activityPoints": "50",
-                "maximumPoints": "50"
+                "activityDate": "20015-04-05T14:30:00Z",
+                "actualPoints": "50",
+                "possiblePoints": "50"
             }
 
     + Schema
@@ -2190,11 +2183,6 @@ This payload will add or update an activity for a PolicyHolder, Regular Driver, 
               "id": "/",
               "type": "object",
               "properties": {
-                "accountId": {
-                  "id": "accountId",
-                  "type": "string",
-                  "required":true
-                },
                 "activityName": {
                   "id": "activityName",
                   "type": "string",
@@ -2205,13 +2193,13 @@ This payload will add or update an activity for a PolicyHolder, Regular Driver, 
                   "type": "string",
                   "required":true
                 },
-                "activityPoints": {
-                  "id": "activityPoints",
+                "actualPoints": {
+                  "id": "actualPoints",
                   "type": "string",
-                  "required":true
+                  "required":false
                 },
-                "maximumPoints": {
-                  "id": "maximumPoints",
+                "possiblePoints": {
+                  "id": "possiblePoints",
                   "type": "string",
                   "required":false
                 }
@@ -2305,33 +2293,30 @@ Get users achievements.By default this service will return only the activities f
     + Body
     
             {
-                "voucherList": [
+                "achievementList": [
                     {
-                        "voucherGroup":"1",
-                        "voucherDescription":"Getting Started",
-                        "achievementList": [
-                            {
-                                "achievementID": "001",
-                                "achievementName": "register",
-                                "achievementDescription":"Register on the App",
-                                "achievementSequence": "1",
-                                "achievementDateTime": "2015-04-05T14:30Z"
-                            },
-                            {
-                                "achievementID": "002",
-                                "achievementName": "firstTrip",
-                                "achievementDescription":"Take First Trip",
-                                "achievementSequence": "2",
-                                "achievementDateTime": "2015-04-08T12:00Z"
-                            },
-                            {
-                                "achievementID": "003",
-                                "achievementName": "defeatHtoH5Days",
-                                "achievementDescription":"Defeat a Fellow Driver in a head to head over 5 days",
-                                "achievementSequence": "3",
-                                "achievementDateTime": ""
-                            }
-                        ]
+                        "achievementID": "001",
+                        "achievementName": "register",
+                        "achievementDescription":"Register on the App",
+                        "achievementSequence": "1",
+                        "voucherId":"1234-56AB-JKLM",
+                        "achievementDateTime": "2015-04-05T14:30:00Z"
+                    },
+                    {
+                        "achievementID": "002",
+                        "achievementName": "firstTrip",
+                        "achievementDescription":"Take First Trip",
+                        "achievementSequence": "2",
+                        "voucherId":"",
+                        "achievementDateTime": "2015-04-08T12:00:00Z"
+                    },
+                    {
+                        "achievementID": "003",
+                        "achievementName": "defeatHtoH5Days",
+                        "achievementDescription":"Defeat a Fellow Driver in a head to head over 5 days",
+                        "achievementSequence": "3",
+                        "voucherId":"",
+                        "achievementDateTime": "2015-04-08T12:00:00Z"
                     }
                 ]
             }
@@ -2343,107 +2328,43 @@ Get users achievements.By default this service will return only the activities f
               "id": "http://jsonschema.net",
               "type": "object",
               "properties": {
-                "voucherList": {
-                  "id": "http://jsonschema.net/voucherList",
+                  "id": "achievementList",
                   "type": "array",
                   "items": {
-                    "id": "http://jsonschema.net/voucherList/0",
+                    "id": "2",
                     "type": "object",
                     "properties": {
-                      "voucherGroup": {
-                        "id": "http://jsonschema.net/voucherList/0/voucherGroup",
-                        "type": "string"
+                      "achievementID": {
+                        "id": "achievementID",
+                        "type": "string",
+                        "required":true
                       },
-                      "voucherDescription": {
-                        "id": "http://jsonschema.net/voucherList/0/voucherDescription",
-                        "type": "string"
+                      "achievementName": {
+                        "id": "achievementName",
+                        "type": "string",
+                        "required":true
                       },
-                      "achievementList": {
-                        "id": "http://jsonschema.net/voucherList/0/achievementList",
-                        "type": "array",
-                        "items": [
-                          {
-                            "id": "http://jsonschema.net/voucherList/0/achievementList/0",
-                            "type": "object",
-                            "properties": {
-                              "achievementID": {
-                                "id": "http://jsonschema.net/voucherList/0/achievementList/0/achievementID",
-                                "type": "string"
-                              },
-                              "achievementName": {
-                                "id": "http://jsonschema.net/voucherList/0/achievementList/0/achievementName",
-                                "type": "string"
-                              },
-                              "achievementDescription": {
-                                "id": "http://jsonschema.net/voucherList/0/achievementList/0/achievementDescription",
-                                "type": "string"
-                              },
-                              "achievementSequence": {
-                                "id": "http://jsonschema.net/voucherList/0/achievementList/0/achievementSequence",
-                                "type": "string"
-                              },
-                              "achievementDateTime": {
-                                "id": "http://jsonschema.net/voucherList/0/achievementList/0/achievementDateTime",
-                                "type": "string"
-                              }
-                            }
-                          },
-                          {
-                            "id": "http://jsonschema.net/voucherList/0/achievementList/1",
-                            "type": "object",
-                            "properties": {
-                              "achievementID": {
-                                "id": "http://jsonschema.net/voucherList/0/achievementList/1/achievementID",
-                                "type": "string"
-                              },
-                              "achievementName": {
-                                "id": "http://jsonschema.net/voucherList/0/achievementList/1/achievementName",
-                                "type": "string"
-                              },
-                              "achievementDescription": {
-                                "id": "http://jsonschema.net/voucherList/0/achievementList/1/achievementDescription",
-                                "type": "string"
-                              },
-                              "achievementSequence": {
-                                "id": "http://jsonschema.net/voucherList/0/achievementList/1/achievementSequence",
-                                "type": "string"
-                              },
-                              "achievementDateTime": {
-                                "id": "http://jsonschema.net/voucherList/0/achievementList/1/achievementDateTime",
-                                "type": "string"
-                              }
-                            }
-                          },
-                          {
-                            "id": "http://jsonschema.net/voucherList/0/achievementList/2",
-                            "type": "object",
-                            "properties": {
-                              "achievementID": {
-                                "id": "http://jsonschema.net/voucherList/0/achievementList/2/achievementID",
-                                "type": "string"
-                              },
-                              "achievementName": {
-                                "id": "http://jsonschema.net/voucherList/0/achievementList/2/achievementName",
-                                "type": "string"
-                              },
-                              "achievementDescription": {
-                                "id": "http://jsonschema.net/voucherList/0/achievementList/2/achievementDescription",
-                                "type": "string"
-                              },
-                              "achievementSequence": {
-                                "id": "http://jsonschema.net/voucherList/0/achievementList/2/achievementSequence",
-                                "type": "string"
-                              },
-                              "achievementDateTime": {
-                                "id": "http://jsonschema.net/voucherList/0/achievementList/2/achievementDateTime",
-                                "type": "string"
-                              }
-                            }
-                          }
-                        ]
+                      "achievementDescription": {
+                        "id": "achievementDescription",
+                        "type": "string",
+                        "required":true
+                      },
+                      "achievementSequence": {
+                        "id": "achievementSequence",
+                        "type": "string",
+                        "required":true
+                      },
+                      "voucherId": {
+                        "id": "voucherId",
+                        "type": "string",
+                        "required":false
+                      },
+                      "achievementDateTime": {
+                        "id": "achievementDateTime",
+                        "type": "string",
+                        "required":true
                       }
                     }
-                  }
                 }
               }
             }
@@ -2502,7 +2423,7 @@ Get users achievements.By default this service will return only the activities f
             ]
         } 
         
-## Set users achievements [/users/{accountId}/userAchievements{achievementName,achievementDateTime}]
+## Set users achievements [/users/{accountId}/userAchievements{?achievementName,achievementDateTime}]
 
 ### Set user achievement [POST]
 Responsible System Analyst : <b>Liam Hederman</b> <br>
@@ -2535,7 +2456,6 @@ This payload will add or update an achievement for a PolicyHolder, Regular Drive
     + Body
     
             {
-                "accountId": "abc123",
                 "achievementName": "register",
                 "achievementDateTime": "20015-04-05T14:30Z"
             }
@@ -2547,11 +2467,6 @@ This payload will add or update an achievement for a PolicyHolder, Regular Drive
               "id": "/",
               "type": "object",
               "properties": {
-                "accountId": {
-                  "id": "accountId",
-                  "type": "string",
-                  "required":true
-                },
                 "activityName": {
                   "id": "achievementName",
                   "type": "string",
@@ -2670,8 +2585,8 @@ Refresh rewards satchel
                     "voidedDate":"",
                     "redeemedYN:"N",
                     "redeemedDate":"",
-                    "voucherIssued":"2015-04-01T14:30Z",
-                    "voucherExpiry":"2015-04-30T14:30Z"
+                    "voucherIssued":"2015-04-01T14:30:00Z",
+                    "voucherExpiry":"2015-04-30T14:30:00Z"
                 ]
             }
     
@@ -2734,6 +2649,7 @@ Responsible Systems Analyst: Liam Hederman
 
 ### Award user voucher [POST]
 This service will award a new voucher to a user or update an existing voucher
+<b><font color="red">Deployed to Telesure Mule DEV Environment</font></b><br><br> 
 
 + Request (application/json)
 
@@ -2891,6 +2807,7 @@ This service will award a new voucher to a user or update an existing voucher
         
 ### Redeem user voucher [PUT]
 This service will update a voucher as redeemed
+<b><font color="red">Deployed to Telesure Mule DEV Environment</font></b><br><br>
 
 + Request (application/json)
 
@@ -3015,6 +2932,7 @@ This service will update a voucher as redeemed
         
 ### Get voucher details [GET]
 Retrieve a specific voucher
+<b><font color="red">Deployed to Telesure Mule DEV Environment</font></b><br><br>
 
 + Request (application/json)
 
@@ -3230,6 +3148,7 @@ This service will return the list of cashback payment for the participant with t
         } 
         
 ## User survey [/users/survey]
+Responsible Analyst: <b>Liam Hederman</b>
 This service will POST and PUT survey information for specific users. E.g. Home Inventory, Geyser Inspection, Online Risk Assessment, Vehicle Inspection and Driving Course.
 
 ### Set user survey [POST]
@@ -3291,7 +3210,7 @@ This service will POST and PUT survey information for specific users. E.g. Home 
     
             {
                 "accountId": "123456",
-                "completedDate": "31/01/2015",
+                "completedDate": "2015-04-05T14:30Z",
                 "surveyID": "ABC1234",
                 "surveyType" : "setHomeInventory",
                 "surveyVersionNumber" : "123"
@@ -3302,13 +3221,11 @@ This service will POST and PUT survey information for specific users. E.g. Home 
     + Header
     
             x-easyearn-accountId: 12312313
-            x-easyearn-usertype: RegularDriver
 
     + Body
             
             {
-                "accountId": "123456",
-                "userType": "RegularDriver"
+                "accountId": "123456"
             }
 
     + Schema
@@ -3321,22 +3238,7 @@ This service will POST and PUT survey information for specific users. E.g. Home 
                         "accountId": {
                             "id": "accountId",
                             "type": "string"
-                        },
-                        "userType": {
-                            "id": "userType",
-                            "type": "string",
-                            "enum": [
-                                "RegularDriver",
-                                "PolicyHolder",
-                                "Aspirant",
-                                "PolicyDriver"
-                            ]
                         }
-                    },
-                    "required": [
-                        "accountId",
-                        "userType"
-                    ]
                 }
 
 + Response 409 (application/json)
@@ -3726,7 +3628,7 @@ This operation will be used by an external system to update a specific users rew
             ]
         } 
 
-## User Fuel Slip Transaction [/users/fuelsliptransaction]
+## User Fuel Slip Transaction [/users/{accountId}/fuelsliptransaction]
 This interface supports the creation and retrieval of manual fuel slips. These originate from OCR or a manual form captured by a user.
 
 ### Create fuel slip transaction [POST]
@@ -3736,7 +3638,6 @@ This interface supports the creation and retrieval of manual fuel slips. These o
     + Body
     
             {
-                "accountId" : "123456",
                 "transactionSource" : "OCR",
                 "dateOfTransaction" : "2015-09-23",
                 "timeOfTransaction" : "14:08:22",
