@@ -116,7 +116,7 @@ This payload will register either a PolicyHolder, Regular Driver, Policy Driver 
             x-easyearn-accountId: 12312313
             x-easyearn-usertype: RegularDriver
 
-  + Body
+    + Body
   
             {
                 "errors": [
@@ -1251,6 +1251,7 @@ Responsible System Analyst : Andre <br>
 
 
 ## User refer friend [/user/{accountId}/referFriend]
+<b><font color="red">Deployed to Telesure Mule TEST Environment</font></b><br><br>
 Responsible Systems Analyst: <b>Liam Hederman</b> <br/>
 Sprint: <b>Telematics Dashboard</b> <br/>
 
@@ -1402,6 +1403,7 @@ This service will be used by an external calling system when a friend needs to b
 
 
 ## User telematic score [/users/{accountId}/score]
+<b><font color="red">Deployed to Telesure Mule TEST Environment</font></b><br><br>
 Responsible Systems Analyst: <b>Liam Hederman</b><br/>
 Sprint: <b>Telematics Dashboard</b><br/>
 <br/>
@@ -1993,6 +1995,7 @@ Get users fuel transactions
         } 
         
 ## Get users activities [/users/{accountId}/userActivities{?activityFromDate,activityToDate}]
+<b><font color="red">Deployed to Telesure Mule TEST Environment</font></b><br><br>
 Responsible Systems Analyst: <b>Liam Hederman</b><br/>
 Sprint: <b>Telematics Dashboard</b><br/>
 Get users activities. By default this service will return only the activities for the current month which is determined by the ESB sysdate. When a date range is supplied, the response will filter activities where the activity date is between the from and to date.
@@ -2132,6 +2135,7 @@ Get users activities. By default this service will return only the activities fo
         } 
         
 ## Set users activities [/users/{accountId}/userActivity]
+<b><font color="red">Deployed to Telesure Mule TEST Environment</font></b><br><br>
 
 ### Set users activities [POST]
 Responsible System Analyst : <b>Liam Hederman</b> <br>
@@ -2271,6 +2275,7 @@ This payload will add or update an activity for a PolicyHolder, Regular Driver, 
         }   
         
 ## Get users achievements [/users/{accountId}/userAchievements{?achievementFromDate,achievementToDate}]
+<b><font color="red">Deployed to Telesure Mule TEST Environment</font></b><br><br>
 Responsible Systems Analyst: <b>Liam Hederman</b><br/>
 Sprint: <b>Telematics Dashboard</b><br/><br/>
 Get users achievements.By default this service will return only the activities for the current month which is determined by the ESB sysdate. When a date range is supplied, the response will filter achievements where the achievement date is between the from and to date.
@@ -2424,6 +2429,7 @@ Get users achievements.By default this service will return only the activities f
         } 
         
 ## Set users achievements [/users/{accountId}/userAchievements{?achievementName,achievementDateTime}]
+<b><font color="red">Deployed to Telesure Mule TEST Environment</font></b><br><br>
 
 ### Set user achievement [POST]
 Responsible System Analyst : <b>Liam Hederman</b> <br>
@@ -2559,6 +2565,7 @@ This payload will add or update an achievement for a PolicyHolder, Regular Drive
         }   
         
 ## User Vouchers [/users/{accountId}/vouchers]
+<b><font color="red">Deployed to Telesure Mule TEST Environment</font></b><br><br>
 Responsible Systems Analyst: Liam Hederman
 
 ### Get voucher details [GET]
@@ -2583,7 +2590,7 @@ Refresh rewards satchel
                     "voucherDescription":"R10.00 voucher",
                     "voidedYN":"N",
                     "voidedDate":"",
-                    "redeemedYN:"N",
+                    "redeemedYN":"N",
                     "redeemedDate":"",
                     "voucherIssued":"2015-04-01T14:30:00Z",
                     "voucherExpiry":"2015-04-30T14:30:00Z"
@@ -2645,11 +2652,12 @@ Refresh rewards satchel
         }
         
 ## User voucher [/users/{accountId}/voucher]
+<b><font color="red">Deployed to Telesure Mule DEV Environment</font></b><br><br>
 Responsible Systems Analyst: Liam Hederman
 
 ### Award user voucher [POST]
 This service will award a new voucher to a user or update an existing voucher
-<b><font color="red">Deployed to Telesure Mule DEV Environment</font></b><br><br> 
+<b><font color="red">Deployed to Telesure Mule TEST Environment</font></b><br><br> 
 
 + Request (application/json)
 
@@ -2665,10 +2673,10 @@ This service will award a new voucher to a user or update an existing voucher
                 "voucherDescription":"R10.00 voucher",
                 "voidedYN":"N",
                 "voidedDate":"",
-                "redeemedYN:"N",
+                "redeemedYN":"N",
                 "redeemedDate":"",
-                "voucherIssued":"2015-04-01T14:30Z",
-                "voucherExpiry":"2015-04-30T14:30Z"
+                "voucherIssued":"2015-04-01T14:30:00Z",
+                "voucherExpiry":"2015-04-30T14:30:00Z"
             
             }
     
@@ -2806,8 +2814,9 @@ This service will award a new voucher to a user or update an existing voucher
         }
         
 ### Redeem user voucher [PUT]
+<b><font color="red">Deployed to Telesure Mule TEST Environment</font></b><br><br>
 This service will update a voucher as redeemed
-<b><font color="red">Deployed to Telesure Mule DEV Environment</font></b><br><br>
+
 
 + Request (application/json)
 
@@ -2860,8 +2869,8 @@ This service will update a voucher as redeemed
             {
                 "accountId": "123456",
                 "voucherId":"ABCD-EFGH-IJKL-MNOP",
-                "redeemedYN:"Y",
-                "redeemedDate":"2015-04-15T14:30Z"
+                "redeemedYN":"Y",
+                "redeemedDate":"2015-04-15T14:30:00Z"
             }
     
 
@@ -2931,8 +2940,9 @@ This service will update a voucher as redeemed
         }
         
 ### Get voucher details [GET]
+<b><font color="red">Deployed to Telesure Mule TEST Environment</font></b><br><br>
 Retrieve a specific voucher
-<b><font color="red">Deployed to Telesure Mule DEV Environment</font></b><br><br>
+
 
 + Request (application/json)
 
@@ -2975,10 +2985,10 @@ Retrieve a specific voucher
                 "voucherDescription":"R10.00 voucher",
                 "voidedYN":"N",
                 "voidedDate":"",
-                "redeemedYN:"N",
+                "redeemedYN":"N",
                 "redeemedDate":"",
-                "voucherIssued":"2015-04-01T14:30Z",
-                "voucherExpiry":"2015-04-30T14:30Z"
+                "voucherIssued":"2015-04-01T14:30:00Z",
+                "voucherExpiry":"2015-04-30T14:30:00Z"
             }
     
 
@@ -3147,7 +3157,8 @@ This service will return the list of cashback payment for the participant with t
             ]
         } 
         
-## User survey [/users/survey]
+## User survey [/users/{accountId}/survey]
+<b><font color="red">Deployed to Telesure Mule TEST Environment</font></b><br><br>
 Responsible Analyst: <b>Liam Hederman</b>
 This service will POST and PUT survey information for specific users. E.g. Home Inventory, Geyser Inspection, Online Risk Assessment, Vehicle Inspection and Driving Course.
 
