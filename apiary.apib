@@ -1,6 +1,6 @@
 FORMAT: 1A
 
-# Andre Easy Earn
+# Easy Earn
 This document defines the various Telesure Rewards Program ESB APIs that will be exposed to external systems. These services will allow the Telesure ESB to orchestrate process with various other systems.
 
 # Group DriveFactor Interfaces
@@ -1590,551 +1590,12 @@ This service will allow a calling system to POST or PUT a driver score for a spe
                 }
             ]
         } 
-
-## User Vehicle assistance status [/users/{accountId}/vehicleAssistance/{assistanceVehicleRequestId}]     
-Responsible System Analyst : Andre <br>
-Get the assistance status for a specific incident
-
-### Get vehicle assistance status [GET]
-Responsible System Analyst : Andre <br>
-Get the status for a specific assistanceVehicleRequestId
-+ Parameters
-
-    + accountId (required, number) ... Users unqiue account number from the mobile app
-    + assistanceVehicleRequestId (required,string) ... Unique identifier for vehicle assistance
-
-+ Response 200 (application/json)
-
-    + Header
-    
-            x-easyearn-accountId: 12312313
-            x-easyearn-usertype: RegularDriver
-
-    + Body
-
-            {
-            "internalStatusDescription": "Pending"
-            }
-
-    + Schema
-
-            {
-                "$schema": "http://json-schema.org/draft-04/schema#",
-                "id": "/",
-                "type": "object",
-                "properties": {
-                "internalStatus": {
-                "id": "internalStatusDescription",
-                "type": "string",
-                "required": true,
-                "enum": [
-                "Pending",
-                "WorkInProgress",
-                "Completed",
-                "Cancelled"
-                ]
-            }
-            }
-            }
-
-
-+ Response 400 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "Something is wrong with the request.",
-                    "internalMessage": "Bad Request",
-                    "code": 400,
-                    "moreInfo": ""
-                }
-            ]
-        }
-
-+ Response 404 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "The object you are searching for does not exist.",
-                    "internalMessage": "Not found",
-                    "code": 404,
-                    "moreInfo": ""
-                }
-            ]
-        }
-
-+ Response 401 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "You are not authorized to use this service.",
-                    "internalMessage": "Unauthorized",
-                    "code": 401,
-                    "moreInfo": ""
-                }
-            ]
-        }
-
-+ Response 503 (application/json)
-
-        {
-        {
-            "errors": [
-                {
-                    "userMessage": "The requested resource is not available.",
-                    "internalMessage": "Service Unavailable",
-                    "code": 503,
-                    "moreInfo": ""
-                }
-            ]
-        } 
-      
-
-## User Vehicle assistance [/users/{accountId}/vehicleAssistance]
-Responsible System Analyst : Andre <br>
-Request Assistance from FirstManagement
-
-### Set a users vehicle request assistance [POST]
-
-+ Request (application/json)
-
-    + Header
-    
-             Authorization: Basic dGVzdDpwYXNzd29yZDE=
-             Accept: application/json
-    
-    + Schema
-    
-                {
-                    "$schema": "http://json-schema.org/draft-04/schema#",
-                    "id": "/",
-                    "type": "object",
-                    "properties": {
-                        "assistDescription" : {
-                            "id" : "assistDescription",
-                            "type" : "string",
-                            "required" : true,
-                            "description" : "This is needed for FAM to indicate whether an accident or roadside assistance is required."    
-                            "enum" : [
-                                "Accident",
-                                "Roadside Assistance"
-                            ]
-                        },
-                        "latitude": {
-                            "id": "latitude",
-                            "type": "string",
-                            "required" : false
-                        },
-                        "longitude": {
-                            "id": "longitude",
-                            "type": "string",
-                            "required" : false
-                        }
-                    }
-                }
-    
-    + Body
-    
-            {
-              "assistDescription" : "Accident",
-              "latitude": "-28.234924",
-              "longitude": "-28.234924"
-            }
-
-            
-+ Response 201 (application/json)
-
-    + Header
-    
-            x-easyearn-accountId: 12312313
-            x-easyearn-usertype: RegularDriver
-            location: /users/{accountId}/vehicleAssistance/{assistanceVehicleRequestId}
-
-+ Response 400 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "Something is wrong with the request.",
-                    "internalMessage": "Bad Request",
-                    "code": 400,
-                    "moreInfo": ""
-                }
-            ]
-        }
-
-+ Response 404 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "The object you are searching for does not exist.",
-                    "internalMessage": "Not found",
-                    "code": 404,
-                    "moreInfo": ""
-                }
-            ]
-        }
-
-+ Response 401 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "You are not authorized to use this service.",
-                    "internalMessage": "Unauthorized",
-                    "code": 401,
-                    "moreInfo": ""
-                }
-            ]
-        }
-
-+ Response 503 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "The requested resource is not available.",
-                    "internalMessage": "Service Unavailable",
-                    "code": 503,
-                    "moreInfo": ""
-                }
-            ]
-        } 
         
 
 
-
-### Get vehicle assistance qualification [GET]
-Responsible System Analyst : Andre <br>
-Get a users free assistance indicator. A true means that the user can get free assistance and false means its paid.
-
-+ Parameters
-
-    + accountId (required, number) ... Users unqiue account number from the mobile app
-    
-+ Response 200 (application/json)
-
-    + Header
-    
-            x-easyearn-accountId: 12312313
-            x-easyearn-usertype: RegularDriver
-
-    + Body
-
-            {
-                "userAssistance": {
-                    "firstManagementUsage": {
-                        "freeAssistQualification": true,
-                        "assistPending": 1,
-                        "assistWorkInProgressCount": 0,
-                        "assistCompletedCount": 12,
-                        "assistCancelledCount": 2
-                    }
-                }
-            }
-
-    + Schema
-    
-            {
-                "$schema": "http://json-schema.org/draft-04/schema#",
-                "id": "/",
-                "type": "object",
-                "properties": {
-                    "userAssistance": {
-                        "id": "userAssistance",
-                        "type": "object",
-                        "properties": {
-                            "firstManagementUsage": {
-                                "id": "firstManagementUsage",
-                                "type": "object",
-                                "properties": {
-                                    "freeAssistQualification": {
-                                        "id": "freeAssistQualification",
-                                        "type": "boolean",
-                                        "required" : true
-                                    },
-                                    "assistPending": {
-                                        "id": "assistPending",
-                                        "type": "integer",
-                                        "required" : true
-                                    },
-                                    "assistWorkInProgressCount": {
-                                        "id": "assistWorkInProgressCount",
-                                        "type": "integer",
-                                        "required" : true
-                                    },
-                                    "assistCompletedCount": {
-                                        "id": "assistCompletedCount",
-                                        "type": "integer",
-                                        "required" : true
-                                    },
-                                    "assistCancelledCount": {
-                                        "id": "assistCancelledCount",
-                                        "type": "integer",
-                                        "required" : true
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-    
-+ Response 400 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "Something is wrong with the request.",
-                    "internalMessage": "Bad Request",
-                    "code": 400,
-                    "moreInfo": ""
-                }
-            ]
-        }
-
-+ Response 404 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "The object you are searching for does not exist.",
-                    "internalMessage": "Not found",
-                    "code": 404,
-                    "moreInfo": ""
-                }
-            ]
-        }
-
-+ Response 401 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "You are not authorized to use this service.",
-                    "internalMessage": "Unauthorized",
-                    "code": 401,
-                    "moreInfo": ""
-                }
-            ]
-        }
-
-+ Response 503 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "The requested resource is not available.",
-                    "internalMessage": "Service Unavailable",
-                    "code": 503,
-                    "moreInfo": ""
-                }
-            ]
-        } 
-      
-## User Home Assistance [/users/{accountId}/homeAssistance/{assistanceHomeRequestId}]
-Responsible System Analyst : Andre <br>
-Request Assistance from EuropAssist
-
-### Set a user home assistance request [POST]
-
-+ Request (application/json)
-
-    + Header
-    
-             Authorization: Basic dGVzdDpwYXNzd29yZDE=
-             Accept: application/json
-    
-    + Schema
-    
-                {
-                    "$schema": "http://json-schema.org/draft-04/schema#",
-                    "id": "/",
-                    "type": "object",
-                    "properties": {
-                        "latitude": {
-                            "id": "latitude",
-                            "type": "string",
-                            "required" : false
-                        },
-                        "longitude": {
-                            "id": "longitude",
-                            "type": "string",
-                            "required" : false
-                        }
-                    }
-                }
-    
-    + Body
-    
-            {
-              "latitude": "-28.234924",
-              "longitude": "-28.234924"
-            }
-
-            
-+ Response 201 (application/json)
-
-    + Header
-    
-            x-easyearn-accountId: 12312313
-            x-easyearn-usertype: RegularDriver
-            location: /users/{accountId}/homeAssistance/{assistanceHomeRequestId}
-
-+ Response 400 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "Something is wrong with the request.",
-                    "internalMessage": "Bad Request",
-                    "code": 400,
-                    "moreInfo": ""
-                }
-            ]
-        }
-
-+ Response 404 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "The object you are searching for does not exist.",
-                    "internalMessage": "Not found",
-                    "code": 404,
-                    "moreInfo": ""
-                }
-            ]
-        }
-
-+ Response 401 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "You are not authorized to use this service.",
-                    "internalMessage": "Unauthorized",
-                    "code": 401,
-                    "moreInfo": ""
-                }
-            ]
-        }
-
-+ Response 503 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "The requested resource is not available.",
-                    "internalMessage": "Service Unavailable",
-                    "code": 503,
-                    "moreInfo": ""
-                }
-            ]
-        } 
-
-### Get home assistance status [GET]
-Responsible System Analyst : Andre <br>
-Get the status for a specific assistanceHomeRequestId
-+ Parameters
-
-    + accountId (required, number) ... Users unqiue account number from the mobile app
-    + assistanceHomeRequestId (required,string) ... Unique identifier for home assistance
-
-+ Response 200 (application/json)
-
-    + Header
-    
-            x-easyearn-accountId: 12312313
-            x-easyearn-usertype: RegularDriver
-
-    + Body
-
-            {
-            "internalStatusDescription": "Pending"
-            }
-
-    + Schema
-
-            {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "id": "/",
-            "type": "object",
-            "properties": {
-            "internalStatus": {
-            "id": "internalStatusDescription",
-            "type": "string",
-            "required": true,
-            "enum": [
-            "Pending",
-            "WorkInProgress",
-            "Completed",
-            "Cancelled"
-            ]
-            }
-            }
-            }
-
-
-+ Response 400 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "Something is wrong with the request.",
-                    "internalMessage": "Bad Request",
-                    "code": 400,
-                    "moreInfo": ""
-                }
-            ]
-        }
-
-+ Response 404 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "The object you are searching for does not exist.",
-                    "internalMessage": "Not found",
-                    "code": 404,
-                    "moreInfo": ""
-                }
-            ]
-        }
-
-+ Response 401 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "You are not authorized to use this service.",
-                    "internalMessage": "Unauthorized",
-                    "code": 401,
-                    "moreInfo": ""
-                }
-            ]
-        }
-
-+ Response 503 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "The requested resource is not available.",
-                    "internalMessage": "Service Unavailable",
-                    "code": 503,
-                    "moreInfo": ""
-                }
-            ]
-        } 
-  
-
 ## User assistance [/users/{accountId}/userAssistance]
 Responsible System Analyst : Andre <br>
-Request Assistance from either FirstManagement or EuropAssist
+Request Assistance from either FirstManagement or EuropAssist. When CAR then First Assist Management is called, when HOME then EuropAssistance is called.
 
 ### Set a user request assistance [POST]
 
@@ -2152,11 +1613,6 @@ Request Assistance from either FirstManagement or EuropAssist
                     "id": "/",
                     "type": "object",
                     "properties": {
-                        "accountId": {
-                            "id": "accountId",
-                            "type": "string",
-                            "required" : true
-                        },
                         "assistType": {
                             "id": "assistType",
                             "type": "string",
@@ -2193,7 +1649,6 @@ Request Assistance from either FirstManagement or EuropAssist
     + Body
     
             {
-              "accountId": "123456",
               "assistType" : "CAR",
               "assistDescription" : "Accident",
               "latitude": "-28.234924",
@@ -2212,8 +1667,6 @@ Request Assistance from either FirstManagement or EuropAssist
     
             {
                 "assistanceRequestId":"FAM4344",
-                "accountId": "123456",
-                "userType": "RegularDriver"
             }
 
     + Schema
@@ -2227,22 +1680,6 @@ Request Assistance from either FirstManagement or EuropAssist
                         "id": "assistanceRequestId",
                         "type": "string",
                         "required" : true
-                    },
-                    "accountId": {
-                        "id": "accountId",
-                        "type": "string"
-                        "required" : true
-                    },
-                    "userType": {
-                        "id": "userType",
-                        "type": "string",
-                        "required" : true,
-                        "enum": [
-                            "RegularDriver",
-                            "PolicyHolder",
-                            "Aspirant",
-                            "PolicyDriver"
-                        ]
                     }
                 }
             }
@@ -2533,7 +1970,7 @@ Get users fuel transactions
             ]
         } 
         
-## Get users activities [/users/{accountId}/userActivities{?activityFromDate,activityToDate}]
+## Get users activities [/users/{accountId}/activities{?activityFromDate,activityToDate}]
 <b><font color="red">Deployed to Telesure Mule TEST Environment</font></b><br><br>
 Responsible Systems Analyst: <b>Liam Hederman</b><br/>
 Sprint: <b>Telematics Dashboard</b><br/>
@@ -2673,7 +2110,7 @@ Get users activities. By default this service will return only the activities fo
             ]
         } 
         
-## Set users activities [/users/{accountId}/userActivity]
+## Set users activities [/users/{accountId}/activities]
 <b><font color="red">Deployed to Telesure Mule TEST Environment</font></b><br><br>
 
 ### Set users activities [POST]
@@ -2813,7 +2250,7 @@ This payload will add or update an activity for a PolicyHolder, Regular Driver, 
             ]
         }   
         
-## Get users achievements [/users/{accountId}/userAchievements{?achievementFromDate,achievementToDate}]
+## Get users achievements [/users/{accountId}/achievements{?achievementFromDate,achievementToDate}]
 <b><font color="red">Deployed to Telesure Mule TEST Environment</font></b><br><br>
 Responsible Systems Analyst: <b>Liam Hederman</b><br/>
 Sprint: <b>Telematics Dashboard</b><br/><br/>
@@ -2967,7 +2404,7 @@ Get users achievements.By default this service will return only the activities f
             ]
         } 
         
-## Set users achievements [/users/{accountId}/userAchievements{?achievementName,achievementDateTime}]
+## Set users achievements [/users/{accountId}/achievements{?achievementName,achievementDateTime}]
 <b><font color="red">Deployed to Telesure Mule TEST Environment</font></b><br><br>
 
 ### Set user achievement [POST]
@@ -3103,7 +2540,7 @@ This payload will add or update an achievement for a PolicyHolder, Regular Drive
             ]
         }   
         
-## User Vouchers [/users/{accountId}/vouchers]
+## User Vouchers [/users/{accountId}/vouchers-old]
 <b><font color="red">Deployed to Telesure Mule TEST Environment</font></b><br><br>
 Responsible Systems Analyst: Liam Hederman
 
@@ -3190,7 +2627,7 @@ Refresh rewards satchel
             ]
         }
         
-## User voucher [/users/{accountId}/voucher]
+## User voucher [/users/{accountId}/vouchers]
 <b><font color="red">Deployed to Telesure Mule DEV Environment</font></b><br><br>
 Responsible Systems Analyst: Liam Hederman
 
@@ -4210,11 +3647,6 @@ This interface supports the creation and retrieval of manual fuel slips. These o
                 "id": "/",
                 "type": "object",
                 "properties": {
-                    "accountId": {
-                        "id": "accountId",
-                        "required": true,
-                        "type": "string"
-                    },
                     "transactionSource": {
                         "id": "transactionSource",
                         "required": true,
