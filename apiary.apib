@@ -7,11 +7,11 @@ This document defines the various Telesure Rewards Program ESB APIs that will be
 The users set of services at /users has all the required user resources and functions.
 
 ## Users [/users/{?accountId,rsaId,firstName,lastName,contactNumber,emailAddress}]
-<b><font color="red">Deployed to Telesure Mule DEV Environment</font></b><br><br>
+<b><font color="red">Deployed to Telesure Mule DEV/TEST Environment</font></b><br><br>
 This operation will create a new user
 
 ### Register a new user [POST]
-<b><font color="red">Deployed to Telesure Mule DEV Environment</font></b><br><br>
+<b><font color="red">Deployed to Telesure Mule DEV/TEST Environment</font></b><br><br>
 Responsible System Analyst : Andre <br>
 This payload will register either a PolicyHolder, Regular Driver, Policy Driver or an Aspirant Driver <br><br>
 **Policy Holder** - A person with a Telesure policy who is only a policy holder and not a driver <br>
@@ -223,7 +223,7 @@ This payload will register either a PolicyHolder, Regular Driver, Policy Driver 
         }
         
 ### Retrieve a user [GET]
-<b><font color="red">Deployed to Telesure Mule DEV Environment</font></b><br><br>
+<b><font color="red">Deployed to Telesure Mule DEV/TEST Environment</font></b><br><br>
 Responsible System Analyst : Andre <br>
 A reusable service that will allow an external system to retrieve details about a specific user.
 
@@ -507,7 +507,7 @@ A reusable service that will allow an external system to retrieve details about 
         } 
         
 ### Update an existing user [PUT]
-<b><font color="red">Deployed to Telesure Mule DEV Environment on 17 Mar 2015</font></b><br><br>
+<b><font color="red">Deployed to Telesure Mule DEV/TEST Environment on 17 Mar 2015</font></b><br><br>
 Responsible System Analyst : Andre <br>
 This service will allow an external system to update a users detail. This service will never be used by non Aspirant user types.
 
@@ -1018,12 +1018,12 @@ This service will used to retrieve a users dashboard
         
 
 ## User card link [/users/{accountId}/card-links]
-<b><font color="red">Deployed to Telesure Mule DEV Environment</font></b><br><br>
+<b><font color="red">Deployed to Telesure Mule DEV/TEST Environment</font></b><br><br>
 Responsible System Analyst : Andre <br>
 Retrieve a users card link
 
 ### Get user payment card link [GET]
-<b><font color="red">Deployed to Telesure Mule DEV Environment on 16 Mar 2015</font></b><br><br>
+<b><font color="red">Deployed to Telesure Mule DEV/TEST Environment on 16 Mar 2015</font></b><br><br>
 
 + Parameters
     + accountId (required, string) ... Unique identifier of the user. Must be unique across all systems.
@@ -1101,7 +1101,7 @@ Retrieve a users card link
         } 
 
 ### Set user payment card link [POST]
-<b><font color="red">Deployed to Telesure Mule DEV Environment on 16 Mar 2015</font></b><br><br>
+<b><font color="red">Deployed to Telesure Mule DEV/TEST Environment on 16 Mar 2015</font></b><br><br>
 Responsible System Analyst : Andre <br>
 
 + Request (application/json)
@@ -1250,7 +1250,7 @@ Responsible System Analyst : Andre <br>
         } 
 
 
-## User refer friend [/user/{accountId}/referFriend]
+## User refer friend [/users/{accountId}/referFriend]
 <b><font color="red">Deployed to Telesure Mule TEST Environment</font></b><br><br>
 Responsible Systems Analyst: <b>Liam Hederman</b> <br/>
 Sprint: <b>Telematics Dashboard</b> <br/>
@@ -1598,6 +1598,7 @@ Responsible System Analyst : Andre <br>
 Request Assistance from either FirstManagement or EuropAssist. When CAR then First Assist Management is called, when HOME then EuropAssistance is called.
 
 ### Set a user request assistance [POST]
+<b><font color="red">Deployed to Telesure Mule TEST Environment on 17 April 2015</font></b><br><br>
 
 + Request (application/json)
 
@@ -1656,7 +1657,7 @@ Request Assistance from either FirstManagement or EuropAssist. When CAR then Fir
             }
 
             
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     + Header
     
@@ -1666,7 +1667,7 @@ Request Assistance from either FirstManagement or EuropAssist. When CAR then Fir
     + Body
     
             {
-                "assistanceRequestId":"FAM4344",
+                "assistanceRequestId":"FAM4344"
             }
 
     + Schema
@@ -1739,6 +1740,7 @@ Request Assistance from either FirstManagement or EuropAssist. When CAR then Fir
         
 ### Get assistance qualification [GET]
 Responsible System Analyst : Andre <br>
+<b><font color="red">Deployed to Telesure Mule TEST Environment on 22 April 2015</font></b><br><br>
 Get a users free assistance indicator. A true means that the user can get free assistance and false means its paid.
 
 + Parameters
@@ -1755,8 +1757,6 @@ Get a users free assistance indicator. A true means that the user can get free a
     + Body
 
             {
-                "accountId": 12345,
-                "userType": "RegularDriver",
                 "userAssistance": {
                     "firstManagementUsage": {
                         "freeAssistQualification": true,
@@ -1775,22 +1775,6 @@ Get a users free assistance indicator. A true means that the user can get free a
                 "id": "/",
                 "type": "object",
                 "properties": {
-                    "accountId": {
-                        "id": "accountId",
-                        "type": "integer",
-                        "required" : true
-                    },
-                    "userType": {
-                        "id": "userType",
-                        "type": "string",
-                        "required" : true,
-                        "enum": [
-                            "RegularDriver",
-                            "PolicyHolder",
-                            "Aspirant",
-                            "PolicyDriver"
-                        ]
-                    },
                     "userAssistance": {
                         "id": "userAssistance",
                         "type": "object",
@@ -2151,9 +2135,9 @@ This payload will add or update an activity for a PolicyHolder, Regular Driver, 
     
             {
                 "activityName": "onlineSurvey",
-                "activityDate": "20015-04-05T14:30:00Z",
-                "actualPoints": "50",
-                "possiblePoints": "50"
+                "activityDateTime": "20015-04-05T14:30:00Z",
+                "actualPoints": 50,
+                "possiblePoints": 50
             }
 
     + Schema
@@ -2168,19 +2152,19 @@ This payload will add or update an activity for a PolicyHolder, Regular Driver, 
                   "type": "string",
                   "required":true
                 },
-                "activityDate": {
-                  "id": "activityDate",
+                "activityDateTime": {
+                  "id": "activityDateTime",
                   "type": "string",
                   "required":true
                 },
                 "actualPoints": {
                   "id": "actualPoints",
-                  "type": "string",
+                  "type": "integer",
                   "required":false
                 },
                 "possiblePoints": {
                   "id": "possiblePoints",
-                  "type": "string",
+                  "type": "integer",
                   "required":false
                 }
               }
@@ -2628,7 +2612,7 @@ Refresh rewards satchel
         }
         
 ## User voucher [/users/{accountId}/vouchers]
-<b><font color="red">Deployed to Telesure Mule DEV Environment</font></b><br><br>
+<b><font color="red">Deployed to Telesure Mule DEV/TEST Environment</font></b><br><br>
 Responsible Systems Analyst: Liam Hederman
 
 ### Award user voucher [POST]
@@ -3023,6 +3007,8 @@ Retrieve a specific voucher
     
         
 ## Get user cashback payments [/users/{accountId}/cashbackPayments{?cashbackFromDate,cashBackToDate}]
+Responsible Systems Analyst:<b>Liam Hederman</b><br/>
+<b><font color="red">Deployed to Telesure Mule TEST Environment</font></b><br><br>
 This service will return the list of cashback payment for the participant with the corresponding status. When no cash back dates are supplied, it is taken as all records for this user be returned.
 
 ### Get user cashback payments [GET]
@@ -3037,7 +3023,6 @@ This service will return the list of cashback payment for the participant with t
     + Header
     
             x-easyearn-accountId: 12312313
-            x-easyearn-usertype: RegularDriver
 
     + Body
     
@@ -3067,6 +3052,54 @@ This service will return the list of cashback payment for the participant with t
                     }
                 ]
             }    
+    
+    + Schema
+            
+            {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "id": "/",
+              "type": "object",
+              "properties": {
+                "totalCashBackEarnedValue": {
+                  "id": "totalCashBackEarnedValue",
+                  "type": "number"
+                },
+                "cashbackPaymentsList": {
+                  "id": "cashbackPaymentsList",
+                  "type": "array",
+                  "items": {
+                    "id": "2",
+                    "type": "object",
+                    "properties": {
+                      "paymentTransactionID": {
+                        "id": "paymentTransactionID",
+                        "type": "string",
+                        "required":true
+                      },
+                      "fuelTransactionAmountValue": {
+                        "id": "fuelTransactionAmountValue",
+                        "type": "number",
+                        "required":true
+                      },
+                      "fuelTransactionDate": {
+                        "id": "fuelTransactionDate",
+                        "type": "string",
+                        "required":true
+                      },
+                      "fuelTransactionLocation": {
+                        "id": "fuelTransactionLocation",
+                        "type": "string",
+                        "required":true
+                      },
+                      "fuelCashbackValue": {
+                        "id": "fuelCashbackValue",
+                        "type": "number",
+                        "required":true
+                      }
+                    }
+                  }
+                }
+              }
     
 + Response 400 (application/json)
 
@@ -3133,9 +3166,9 @@ This service will return the list of cashback payment for the participant with t
             ]
         } 
         
-## User survey [/users/{accountId}/survey]
-<b><font color="red">Deployed to Telesure Mule TEST Environment</font></b><br><br>
-Responsible Analyst: <b>Liam Hederman</b>
+## User surveys [/users/{accountId}/surveys]
+<b><font color="red">Deployed to Telesure Mule DEV/TEST Environment</font></b><br><br>
+Responsible Analyst: <b>Liam Hederman</b><br/><br/>
 This service will POST and PUT survey information for specific users. E.g. Home Inventory, Geyser Inspection, Online Risk Assessment, Vehicle Inspection and Driving Course.
 
 ### Set user survey [POST]
@@ -3147,6 +3180,15 @@ This service will POST and PUT survey information for specific users. E.g. Home 
              Authorization: Basic dGVzdDpwYXNzd29yZDE=
              Accept: application/json
              
+    + Body
+    
+            {
+                "completedDate": "2015-04-05T14:30:00Z",
+                "surveyID": "ABC1234",
+                "surveyType" : "setHomeInventory",
+                "surveyVersionNumber" : "123"
+            }
+             
     + Schema
     
             {
@@ -3154,17 +3196,15 @@ This service will POST and PUT survey information for specific users. E.g. Home 
                 "id": "/",
                 "type": "object",
                 "properties": {
-                    "accountId": {
-                        "id": "accountId",
-                        "type": "string"
-                    },
                     "completedDate": {
                         "id": "completedDate",
-                        "type": "string"
+                        "type": "string",
+                        "required":true
                     },
                     "surveyID": {
                         "id": "surveyID",
-                        "type": "string"
+                        "type": "string",
+                        "required":true
                     },
                     "surveyType": {
                         "id": "surveyType",
@@ -3177,31 +3217,18 @@ This service will POST and PUT survey information for specific users. E.g. Home 
                             "geyserInspection",
                             "homeContentsInventory",
                             "riskAssessment"
-                        ]
+                        ],
+                        "required":true
                     },
                     "surveyVersionNumber": {
                         "id": "surveyVersionNumber",
-                        "type": "string"
+                        "type": "string",
+                        "required":true
                     }
-                },
-                "required": [
-                    "accountId",
-                    "completedDate",
-                    "surveyID",
-                    "surveyType",
-                    "surveyVersionNumber"
-                ]
+                }
             }
 
-    + Body
-    
-            {
-                "accountId": "123456",
-                "completedDate": "2015-04-05T14:30Z",
-                "surveyID": "ABC1234",
-                "surveyType" : "setHomeInventory",
-                "surveyVersionNumber" : "123"
-            }
+
     
 + Response 201 (application/json)
 
@@ -3296,165 +3323,6 @@ This service will POST and PUT survey information for specific users. E.g. Home 
         } 
         
 
-### Update user survey [PUT]
-This service will allow a calling system to update details for an existing survey.
-
-+ Request (application/json)
-
-    + Header
-    
-             Authorization: Basic dGVzdDpwYXNzd29yZDE=
-             Accept: application/json
-             
-    + Schema
-    
-                {
-                    "$schema": "http://json-schema.org/draft-04/schema#",
-                    "id": "/",
-                    "type": "object",
-                    "properties": {
-                        "accountId": {
-                            "id": "accountId",
-                            "type": "string"
-                        },
-                        "completedDate": {
-                            "id": "completedDate",
-                            "type": "string"
-                        },
-                        "surveyID": {
-                            "id": "surveyID",
-                            "type": "string"
-                        },
-                        "surveyType": {
-                            "id": "surveyType",
-                            "type": "string",
-                        "enum": [
-                            "setHomeInventory",
-                            "setOnlineRiskAssessment",
-                            "setGeyserInspection",
-                            "setExperienceRating",
-                            "setVehicleInspection",
-                            "setDrivingCourse"
-                        ]
-                        },
-                        "surveyVersionNumber": {
-                            "id": "surveyVersionNumber",
-                            "type": "string"
-                        }
-                    },
-                    "required": [
-                        "accountId",
-                        "completedDate",
-                        "surveyID",
-                        "surveyType",
-                        "surveyVersionNumber"
-                    ]
-                }
-
-    + Body
-    
-            {
-                "accountId": "123456",
-                "completedDate": "31/01/2015",
-                "surveyID": "ABC1234",
-                "surveyType" : "setHomeInventory",
-                "surveyVersionNumber" : "123"
-            }
-    
-+ Response 200 (application/json)
-
-    + Header
-    
-            x-easyearn-accountId: 12312313
-            x-easyearn-usertype: RegularDriver
-
-    + Body
-            
-            {
-                "accountId": "123456",
-                "userType": "RegularDriver"
-            }
-            
-    + Schema
-    
-            {
-                "$schema": "http://json-schema.org/draft-04/schema#",
-                "id": "/",
-                "type": "object",
-                "properties": {
-                    "accountId": {
-                        "id": "accountId",
-                        "type": "string"
-                    },
-                    "userType": {
-                        "id": "userType",
-                        "type": "string",
-                        "enum": [
-                            "RegularDriver",
-                            "PolicyHolder",
-                            "Aspirant",
-                            "PolicyDriver"
-                        ]
-                    }
-                },
-                "required": [
-                    "accountId",
-                    "userType"
-                ]
-            }
-            
-+ Response 400 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "Something is wrong with the request.",
-                    "internalMessage": "Bad Request",
-                    "code": 400,
-                    "moreInfo": ""
-                }
-            ]
-        }
-
-+ Response 404 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "The object you are searching for does not exist.",
-                    "internalMessage": "Not found",
-                    "code": 404,
-                    "moreInfo": ""
-                }
-            ]
-        }
-
-+ Response 401 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "You are not authorized to use this service.",
-                    "internalMessage": "Unauthorized",
-                    "code": 401,
-                    "moreInfo": ""
-                }
-            ]
-        }
-
-+ Response 503 (application/json)
-
-        {
-            "errors": [
-                {
-                    "userMessage": "The requested resource is not available.",
-                    "internalMessage": "Service Unavailable",
-                    "code": 503,
-                    "moreInfo": ""
-                }
-            ]
-        } 
-        
 ## Get user fuel spend limits [/users/{accountId}/fuelSpendLimits]
 This service will return the fuel spend limits for the specified accountId
 
@@ -4372,7 +4240,6 @@ This payload will create a new profile of points and cashback limits from Entele
                 "accountId": "123456",
                 "callbackDateTime": "2013-03-10T10:00:00Z",
                 "currentTier": "2",
-                "tierDescription":"Level 2",
                 "maxPossibleTier": "5",
                 "maxPossiblePoints": "2000",
                 "currentTotalPoints": "750",
@@ -4404,11 +4271,6 @@ This payload will create a new profile of points and cashback limits from Entele
                 },
                 "currentTier": {
                   "id": "currentTier",
-                  "type": "string",
-                  "required":true
-                },
-                "tierDescription": {
-                  "id": "tierDescription",
                   "type": "string",
                   "required":true
                 },
@@ -4544,6 +4406,7 @@ Sprint: <b>Telematics Dashboard</b><br/>
 Get users cashback transaction from their fuel and their service station matched off the merchant number for the transaction
 
 ### Get users fuel transactions [GET]
+<b><font color="red">Deployed to Telesure Mule DEV/TEST Environment</font></b><br><br>
 
 + Parameters
 
@@ -4675,281 +4538,6 @@ Get users cashback transaction from their fuel and their service station matched
         } 
 
 
-## User Activities [/users/{accountId}/activities{?limit,select,skip,rawQuery,sort,queryField}]
-All the users activities
-
-+ Parameters
-    + accountId (required, string) ... Unique identifier of the user. Must be unique across all systems.
-    + limit (optional, number) ... Maximum number of users to retrieve. Default is 50.
-    + select (optional, string) ... fields to select in comma separated list.
-    + skip (optional, integer) ... the number of pages to skip.
-    + rawQuery (optional, object) ... the Mongo style query that can be applied
-    + sort (optional, string) ... the sort order in format field -fieldName
-    + queryField (optional, string) ... simplified search for string values field=value
-
-### Retrieve a User Activities [GET]
-
-+ Response 200 (application/json)
-
-## Generic User Activities [/users/{accountId}/activities/{activityName}]
-Generic users activity resource
-
-+ Parameters
-    + accountId (required, string) ... Unique identifier of the user. Must be unique across all systems.
-    + activityName (required,string) ... The name of the activity
-
-### Retrieve the User Activity [GET]
-
-+ Response 200 (application/json)
-
-### Create the User Activity [POST]
-
-+ Response 200 (application/json)
-
-    + Body 
-            
-            {
-                "reference":"abc123",
-                "transactionDate":"2015-03-01T15:00:00T",
-                "test"
-            }
-            
-    + Schema
-            
-            {
-                "type":"object",
-                "properties":{
-                    "reference":{"type":"string"},
-                    "transactionDate":{"type":"string","format":"date-time"},
-                    "description":{"type":"string"}
-                }
-            }   
-
-## Generic User Activity Instance [/users/{accountId}/activities/{activityName}/{activityInstanceId}]
-Generic users activity resource
-
-+ Parameters
-    + accountId (required, string) ... Unique identifier of the user. Must be unique across all systems.
-    + activityName (required,string) ... The name of the activity
-    + activityInstanceId (required,string) ... The speicifc activity instance id
-    
-### Retrieve the specific User Activity [GET]
-
-+ Response 200 (application/json)
-
-
-## Fuel Spend Activities [/users/{accountId}/activities/fuelSpend{?limit,select,skip,rawQuery,sort,queryField}]
-The Fuel Spend activities
-
-+ Parameters
-    + accountId (required, string) ... Unique identifier of the user. Must be unique across all systems.
-    + limit (optional, number) ... Maximum number of users to retrieve. Default is 50.
-    + select (optional, string) ... fields to select in comma separated list.
-    + skip (optional, integer) ... the number of pages to skip.
-    + rawQuery (optional, object) ... the Mongo style query that can be applied
-    + sort (optional, string) ... the sort order in format field -fieldName
-    + queryField (optional, string) ... simplified search for string values field=value
-   
-### Retrieve a Users Fuel Spend Activities [GET]
-
-+ Response 200 (application/json)
-     
-### Creates a Users Fuel Spend Activity [POST]
-
-+ Response 202 (application/json)
-
-    + Body
-            
-            {
-                "accountId": "123456",
-                "transactionDate": "2015-03-01T15:00:00Z",
-                "sequence": "z1267",
-                "reference": "6678i23",
-                "merchantId": "1023-9995",
-                "amount": 123.45,
-                "litres": 20.3
-            }
-
-    + Schema
-            
-            {
-                "type": "object",
-                "name":"fuelSpend",
-                "title":"Fuel Spend",
-                "description":"Fuel Spend Activity",
-                "properties": {
-                    "accountId": {
-                        "type": "string"
-                    },
-                    "transactionDate": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "reference": {
-                        "type": "string"
-                    },
-                    "sequence": {
-                        "type": "string"
-                    },
-                    "merchantId": {
-                        "type": "string"
-                    },
-                    "amount": {
-                        "type": "number"
-                    },
-                    "litres": {
-                        "type": "number"
-                    }
-                },
-                "required":["accountId","transactionDate","reference","sequence","merchantId","amount","litres"]
-            }
-
-
-## Fuel Spend Activity [/users/{accountId}/activities/fuelSpend/{activityId}]
-A specific Fuel Spend activity
-
-+ Parameters
-    + accountId (required, string) ... Unique identifier of the user. Must be unique across all systems.
-    + activityId (required, string) ... The specific activity identifier
-
-### Retrieve a Users Fuel Spend Activity  [GET]
-
-+ Response 200 (application/json)
-
-## User Achievements [/users/{accountId}/achievements{?limit,select,skip,rawQuery,sort,queryField}]
-All the users achievements
-
-+ Parameters
-    + accountId (required, string) ... Unique identifier of the user. Must be unique across all systems.
-    + limit (optional, number) ... Maximum number of users to retrieve. Default is 50.
-    + select (optional, string) ... fields to select in comma separated list.
-    + skip (optional, integer) ... the number of pages to skip.
-    + rawQuery (optional, object) ... the Mongo style query that can be applied
-    + sort (optional, string) ... the sort order in format field -fieldName
-    + queryField (optional, string) ... simplified search for string values field=value
-
-### Retrieve a User Achievements [GET]
-
-+ Response 200 (application/json)
-
-
-## Generic User Achievements [/users/{accountId}/achievements/{achievementName}]
-Generic users achievement resource
-
-+ Parameters
-    + accountId (required, string) ... Unique identifier of the user. Must be unique across all systems.
-    + achievementName (required,string) ... The name of the activity
-
-### Retrieve the User Achievement [GET]
-
-+ Response 200 (application/json)
-
-### Create the User Achievement [POST]
-
-+ Response 200 (application/json)
-
-    + Body 
-            
-            {
-                "reference":"abc123",
-                "transactionDate":"2015-03-01T15:00:00T",
-                "test"
-            }
-            
-    + Schema
-            
-            {
-                "type":"object",
-                "properties":{
-                    "reference":{"type":"string"},
-                    "transactionDate":{"type":"string","format":"date-time"},
-                    "description":{"type":"string"}
-                }
-            }   
-
-## Generic User Achievement Instance [/users/{accountId}/activities/{achievementName}/{achievementInstanceId}]
-Generic users Achievement resource
-
-+ Parameters
-    + accountId (required, string) ... Unique identifier of the user. Must be unique across all systems.
-    + achievementName (required,string) ... The name of the activity
-    + achievementInstanceId (required,string) ... The speicifc activity instance id
-    
-### Retrieve the specific User Activity [GET]
-
-+ Response 200 (application/json)
-
-## The Users Vouchers [/users/{accountId}/vouchers{?limit,select,skip,rawQuery,sort,queryField}]
-The users vouchers
-
-+ Parameters
-    + accountId (required, string) ... Unique identifier of the user. Must be unique across all systems.
-    + limit (optional, number) ... Maximum number of users to retrieve. Default is 50.
-    + select (optional, string) ... fields to select in comma separated list.
-    + skip (optional, integer) ... the number of pages to skip.
-    + rawQuery (optional, object) ... the Mongo style query that can be applied
-    + sort (optional, string) ... the sort order in format field -fieldName
-    + queryField (optional, string) ... simplified search for string values field=value
-
-### Retrieve a Users Vouchers  [GET]
-
-+ Response 200 (application/json)
-
-## The Users Available Vouchers [/users/{accountId}/vouchers/available{?limit,select,skip,rawQuery,sort,queryField}]
-The users available vouchers
-
-+ Parameters
-    + accountId (required, string) ... Unique identifier of the user. Must be unique across all systems.
-    + limit (optional, number) ... Maximum number of users to retrieve. Default is 50.
-    + select (optional, string) ... fields to select in comma separated list.
-    + skip (optional, integer) ... the number of pages to skip.
-    + rawQuery (optional, object) ... the Mongo style query that can be applied
-    + sort (optional, string) ... the sort order in format field -fieldName
-    + queryField (optional, string) ... simplified search for string values field=value
-
-### Retrieve a Users Available Vouchers  [GET]
-
-+ Response 200 (application/json)
-
-## The Users Redeemed Vouchers [/users/{accountId}/vouchers/redeemed{?limit,select,skip,rawQuery,sort,queryField}]
-The users redeemed vouchers
-
-+ Parameters
-    + accountId (required, string) ... Unique identifier of the user. Must be unique across all systems.
-    + limit (optional, number) ... Maximum number of users to retrieve. Default is 50.
-    + select (optional, string) ... fields to select in comma separated list.
-    + skip (optional, integer) ... the number of pages to skip.
-    + rawQuery (optional, object) ... the Mongo style query that can be applied
-    + sort (optional, string) ... the sort order in format field -fieldName
-    + queryField (optional, string) ... simplified search for string values field=value
-
-### Retrieve a Users Redeemed Vouchers  [GET]
-
-+ Response 200 (application/json)
-
-## The Users Voucher [/users/{accountId}/vouchers/{voucherId}]
-The users specific voucher
-
-+ Parameters
-    + accountId (required, string) ... Unique identifier of the user. Must be unique across all systems.
-    + voucherId (required, string) ... The specific voucher code
-
-
-### Retrieve a Users Specific Voucher  [GET]
-
-+ Response 200 (application/json)
-
-## Redeem User Voucher [/users/{accountId}/vouchers/{voucherId}/redeem]
-Redeems a users specific voucher
-
-+ Parameters
-    + accountId (required, string) ... Unique identifier of the user. Must be unique across all systems.
-    + voucherId (required, string) ... The specific voucher code
-
-
-### Redeems a Users Specific Voucher  [PUT]
-
-+ Response 200 (application/json)
 
 ## POST Fuel Transactions [/users/{accountId}/fuelSpend]
 Post fuel transactions to Entelect when Total, Manual Fuel Slip or the Mobile app sends through fuel transactions.
@@ -5048,60 +4636,75 @@ Post fuel transactions to Entelect when Total, Manual Fuel Slip or the Mobile ap
     + Body
     
             {
-                "statusDescription": "Approved/RebateReached/PartialApproval",
-                "rebateLitres": 35.9,
-                "uid": "123456",
-                "rebateLimit": 100.98,
-                "rebateRemaining": 120.11,
-                "rebateForTransaction": 30.99
+              "uid": "1234639",
+              "rspCode": "00",
+              "transactionDate": "2015-03-26T07:28:27Z",
+              "sequence": "12123GT",
+              "merchantId": "1231231",
+              "merchantName": "Total N3",
+              "amount": 720.25,
+              "litres": 59.00,
+              "source": "Total – TransactionJunction"
             }
             
     + Schema
 
             {
-                "$schema": "http://json-schema.org/draft-04/schema#",
-                "id": "/",
-                "type": "object",
-                "properties": {
-                    "statusDescription": {
-                        "id": "statusDescription",
-                        "type": "string",
-                        "enum": [
-                            "Approved",
-                            "RebateReached",
-                            "PartialApproval"
-                        ]
-                    },
-                    "rebateLitres": {
-                        "id": "rebateLitres",
-                        "type": "number"
-                    },
-                    "uid": {
-                        "id": "uid",
-                        "type": "string"
-                    },
-                    "rebateLimit": {
-                        "id": "rebateLimit",
-                        "type": "number"
-                    },
-                    "rebateRemaining": {
-                        "id": "rebateRemaining",
-                        "type": "number"
-                    },
-                    "rebateForTransaction": {
-                        "id": "rebateForTransaction",
-                        "type": "number"
-                    }
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "id": "/",
+              "type": "object",
+              "properties": {
+                "uid": {
+                  "id": "uid",
+                  "type": "string"
                 },
-                "required": [
-                    "statusDescription",
-                    "rebateLitres",
-                    "uid",
-                    "rebateLimit",
-                    "rebateRemaining",
-                    "rebateForTransaction"
-                ]
+                "transactionDate": {
+                  "id": "transactionDate",
+                  "type": "string"
+                },
+                "rspCode": {
+                  "id": "rspCode",
+                  "type": "string"
+                },
+                "sequence": {
+                  "id": "sequence",
+                  "type": "string"
+                },
+                "merchantId": {
+                  "id": "merchantId",
+                  "type": "string"
+                },
+                "merchantName": {
+                  "id": "merchantName",
+                  "type": "string"
+                },
+                "amount": {
+                  "id": "amount",
+                  "type": "number"
+                },
+                "litres": {
+                  "id": "litres",
+                  "type": "number"
+                },
+                "source": {
+                  "id": "source",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "uid",
+                "transactionDate",
+                "rspCode",
+                "sequence",
+                "merchantId",
+                "merchantName",
+                "amount",
+                "litres",
+                "source"
+              ]
             }
+            
+
 
 + Response 409 (application/json)
 
