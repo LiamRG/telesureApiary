@@ -777,7 +777,6 @@ This service will used to retrieve a users dashboard
                   "rsaId": "1234567890123",
                   "userType": "RegularDriver",
                   "regularDriverAccountId": "1234",
-                  "policyNumber": "1234",
                   "currentTier": 1,
                   "currentPointsTierDescription": "Tier1",
                   "currentTotalPoints": 300,
@@ -791,7 +790,6 @@ This service will used to retrieve a users dashboard
                 {
                   "firstName": "Max",
                   "lastName": "Payne",
-                  "policyNumber": "1235",
                   "rsaId": "1234567890124",
                   "userType": "RegularDriver",
                   "regularDriverAccountId": "1234",
@@ -811,7 +809,6 @@ This service will used to retrieve a users dashboard
                   "rsaId": "1234567890123",
                   "userType": "RegularDriver",
                   "regularDriverAccountId": "1234",
-                  "policyNumber": "1236",
                   "currentTier": 1,
                   "currentPointsTierDescription": "Tier1",
                   "currentTotalPoints": 300,
@@ -914,11 +911,6 @@ This service will used to retrieve a users dashboard
                                 },
                                 "regularDriverAccountId": {
                                     "id": "regularDriverAccountId",
-                                    "required": true,
-                                    "type": "string"
-                                },
-                                "policyNumber": {
-                                    "id": "policyNumber",
                                     "required": true,
                                     "type": "string"
                                 },
@@ -1759,7 +1751,7 @@ Get a users free assistance indicator. A true means that the user can get free a
             {
                 "userAssistance": {
                     "firstManagementUsage": {
-                        "freeAssistQualification": true,
+                        "freeManagementUsage": true,
                         "assistPending": 1,
                         "assistWorkInProgressCount": 0,
                         "assistCompletedCount": 12,
@@ -1779,8 +1771,8 @@ Get a users free assistance indicator. A true means that the user can get free a
                         "id": "userAssistance",
                         "type": "object",
                         "properties": {
-                            "firstManagementUsage": {
-                                "id": "firstManagementUsage",
+                            "freeManagementUsage": {
+                                "id": "freeManagementUsage",
                                 "type": "object",
                                 "properties": {
                                     "freeAssistQualification": {
@@ -2636,7 +2628,9 @@ This service will award a new voucher to a user or update an existing voucher
                 "redeemedYN":"N",
                 "redeemedDate":"",
                 "voucherIssued":"2015-04-01T14:30:00Z",
-                "voucherExpiry":"2015-04-30T14:30:00Z"
+                "voucherExpiry":"2015-04-30T14:30:00Z",
+                "gpsLat":null,
+                "gpsLong":null
             
             }
     
@@ -2690,6 +2684,16 @@ This service will award a new voucher to a user or update an existing voucher
                 "voucherExpiry": {
                   "id": "http://jsonschema.net/voucherExpiry",
                   "required":true,
+                  "type": "string"
+                },
+                "gpsLat": {
+                  "id": "http://jsonschema.net/gpsLat",
+                  "required":false,
+                  "type": "string"
+                },
+                "gpsLong": {
+                  "id": "http://jsonschema.net/gpsLong",
+                  "required":false,
                   "type": "string"
                 }
             }
@@ -3484,7 +3488,7 @@ This operation will be used by an external system to update a specific users rew
         } 
 
 ## User Fuel Slip Transaction [/users/{accountId}/fuelsliptransaction]
-This interface supports the creation and retrieval of manual fuel slips. These originate from OCR or a manual form captured by a user.
+This interface supports the creation and retrieval of manual fuel slips. These originate from OCR or a manual form captured by a user. When OCR then the HTTP Status code is 201 and when Manual then the HTTP Status is 202
 
 ### Create fuel slip transaction [POST]
 
@@ -3505,7 +3509,9 @@ This interface supports the creation and retrieval of manual fuel slips. These o
                 "fuelType" : "Eco Diesel 95",
                 "uploadLat" : "-24.90",
                 "uploadLong" : "24.95",
-                "fuelslipimageurl" : ""
+                "fuelslipimageurl" : "",
+                "sequenceId" : 123432,
+                "terminalId" : 123111
             }
             
     + Schema
@@ -3517,7 +3523,6 @@ This interface supports the creation and retrieval of manual fuel slips. These o
                 "properties": {
                     "transactionSource": {
                         "id": "transactionSource",
-                        "required": true,
                         "type": "string",
                         "enum": [
                             "Manual",
@@ -3526,22 +3531,18 @@ This interface supports the creation and retrieval of manual fuel slips. These o
                     },
                     "dateOfTransaction": {
                         "id": "dateOfTransaction",
-                        "required": true,
                         "type": "string"
                     },
                     "timeOfTransaction": {
                         "id": "timeOfTransaction",
-                        "required": true,
                         "type": "string"
                     },
                     "transactionNumber": {
                         "id": "transactionNumber",
-                        "required": true,
                         "type": "string"
                     },
                     "randAmount": {
                         "id": "randAmount",
-                        "required": true,
                         "type": "number"
                     },
                     "cardNumber": {
@@ -3550,17 +3551,14 @@ This interface supports the creation and retrieval of manual fuel slips. These o
                     },
                     "stationid": {
                         "id": "stationid",
-                        "required": true,
                         "type": "string"
                     },
                     "stationName": {
                         "id": "stationName",
-                        "required": true,
                         "type": "string"
                     },
                     "litresDispensed": {
                         "id": "litresDispensed",
-                        "required": true,
                         "type": "number"
                     },
                     "fuelType": {
@@ -3569,20 +3567,42 @@ This interface supports the creation and retrieval of manual fuel slips. These o
                     },
                     "uploadLat": {
                         "id": "uploadLat",
-                        "required": false,
                         "type": "string"
                     },
                     "uploadLong": {
                         "id": "uploadLong",
-                        "required": false,
                         "type": "string"
                     },
                     "fuelslipimageurl": {
                         "id": "fuelslipimageurl",
-                        "type": "string",
-                        "required": true
+                        "type": "string"
+                    },
+                    "sequenceId": {
+                        "id": "sequenceId",
+                        "type": "integer"
+                    },
+                    "terminalId": {
+                        "id": "terminalId",
+                        "type": "integer"
                     }
-                }
+                },
+                "required": [
+                    "transactionSource",
+                    "dateOfTransaction",
+                    "timeOfTransaction",
+                    "transactionNumber",
+                    "randAmount",
+                    "cardNumber",
+                    "stationid",
+                    "stationName",
+                    "litresDispensed",
+                    "fuelType",
+                    "uploadLat",
+                    "uploadLong",
+                    "fuelslipimageurl",
+                    "sequenceId",
+                    "terminalId"
+                ]
             }
             
 
@@ -4247,6 +4267,7 @@ This payload will create a new profile of points and cashback limits from Entele
                 "rebatePercentagePerTransaction": "0.1",
                 "currentBalanceToPayback": "71.50",
                 "rebateRemaining":"61.00",
+                "rebateNinetyDays":"345.00",
                 "dateOfLastPayment": "2013-02-10T10:00:00Z",
                 "amountOfLastPayment": "97.00",
                 "paymentStatus": "Paid"
@@ -4308,7 +4329,12 @@ This payload will create a new profile of points and cashback limits from Entele
                   "id":"rebateRemaining",
                   "type":"string",
                   "required":true
-                },
+                },,
+                "rebateNinetyDays": {
+                  "id":"rebateNinetyDays",
+                  "type":"string",
+                  "required":true
+                }
                 "dateOfLastPayment": {
                   "id": "dateOfLastPayment",
                   "type": "string",
@@ -4326,7 +4352,8 @@ This payload will create a new profile of points and cashback limits from Entele
                   "enum": [
                     "Paid",
                     "Pending",
-                    "Rejected"
+                    "Rejected",
+                    "No Payment"
                     ]
                 }
               }
