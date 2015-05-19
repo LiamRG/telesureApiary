@@ -2415,7 +2415,7 @@ This payload will add or update an achievement for a PolicyHolder, Regular Drive
     
             {
                 "achievementName": "register",
-                "achievementDateTime": "20015-04-05T14:30Z"
+                "achievementDateTime": "20015-04-05T14:30:30Z"
             }
 
     + Schema
@@ -2779,8 +2779,9 @@ This service will award a new voucher to a user or update an existing voucher
         
 ### Redeem user voucher [PUT]
 <b><font color="red">Deployed to Telesure Mule TEST Environment</font></b><br><br>
-This service will update a voucher as redeemed
+This service will update a voucher. It can be redeemed by updating its redeemedDate
 
+<b><font color="red">Deployed to Telesure Mule TEST Environment</font></b><br><br> 
 
 + Request (application/json)
 
@@ -2792,8 +2793,16 @@ This service will update a voucher as redeemed
     
             {
                 "voucherId":"ABCD-GEFJ-KLMN-OPQR",
-                "gpsLat":"-25.97976648547725",
-                "gpsLong":"28.01441788673401"
+                "voucherBarcode":"21234567",
+                "voucherDescription":"R10.00 voucher",
+                "voidedYN":"N",
+                "voidedDate":"",
+                "redeemedYN":"N",
+                "redeemedDate":"",
+                "voucherIssued":"2015-04-01T14:30:00Z",
+                "voucherExpiry":"2015-04-30T14:30:00Z",
+                "gpsLat":null,
+                "gpsLong":null
             
             }
     
@@ -2809,17 +2818,56 @@ This service will update a voucher as redeemed
                   "required":true,
                   "type": "string"
                 },
+                "voucherBarcode": {
+                  "id": "http://jsonschema.net/voucherBarcode",
+                  "required":true,
+                  "type": "string"
+                },
+                "voucherDescription": {
+                  "id": "http://jsonschema.net/voucherDescription",
+                  "required":true,
+                  "type": "string"
+                },
+                "voidedYN": {
+                  "id": "http://jsonschema.net/voidedYN",
+                  "required":true,
+                  "type": "string"
+                },
+                "voidedDate": {
+                  "id": "http://jsonschema.net/voidedDate",
+                  "required":true,
+                  "type": "string"
+                },
+                "redeemedYN": {
+                  "id": "http://jsonschema.net/redeemedYN",
+                  "required":true,
+                  "type": "string"
+                },
+                "redeemedDate": {
+                  "id": "http://jsonschema.net/redeemedDate",
+                  "required":true,
+                  "type": "string"
+                },
+                "voucherIssued": {
+                  "id": "http://jsonschema.net/voucherIssued",
+                  "required":true,
+                  "type": "string"
+                },
+                "voucherExpiry": {
+                  "id": "http://jsonschema.net/voucherExpiry",
+                  "required":true,
+                  "type": "string"
+                },
                 "gpsLat": {
                   "id": "http://jsonschema.net/gpsLat",
-                  "required":true,
+                  "required":false,
                   "type": "string"
                 },
                 "gpsLong": {
                   "id": "http://jsonschema.net/gpsLong",
-                  "required":true,
+                  "required":false,
                   "type": "string"
                 }
-                
             }
             
 + Response 201 (application/json)
@@ -2832,9 +2880,7 @@ This service will update a voucher as redeemed
     
             {
                 "accountId": "123456",
-                "voucherId":"ABCD-EFGH-IJKL-MNOP",
-                "redeemedYN":"Y",
-                "redeemedDate":"2015-04-15T14:30:00Z"
+                "voucherId":"ABCD-EFGH-IJKL-MNOP"
             }
     
 
@@ -2869,7 +2915,7 @@ This service will update a voucher as redeemed
         {
             "errors": [
                 {
-                    "userMessage": "Voucher already redeemed.",
+                    "userMessage": "Duplicate voucher.",
                     "internalMessage": "Conflict",
                     "code": 404,
                     "moreInfo": ""
@@ -3497,21 +3543,21 @@ This interface supports the creation and retrieval of manual fuel slips. These o
     + Body
     
             {
-                "transactionSource" : "OCR",
-                "dateOfTransaction" : "2015-09-23",
-                "timeOfTransaction" : "14:08:22",
-                "transactionNumber" : "12312313",
-                "randAmount" : 250.76,
-                "cardNumber" : "123456****1234",
-                "stationid" : "1",
-                "stationName" : "Total Midrand",
-                "litresDispensed" : 20.87,
-                "fuelType" : "Eco Diesel 95",
-                "uploadLat" : "-24.90",
-                "uploadLong" : "24.95",
-                "fuelslipimageurl" : "",
-                "sequenceId" : 123432,
-                "terminalId" : 123111
+              "transactionSource": "OCR",
+              "dateOfTransaction": "2015-09-23",
+              "timeOfTransaction": "14:08:22",
+              "transactionNumber": "12312313",
+              "randAmount": 250.76,
+              "cardNumber": "123456****1234",
+              "stationId": "1",
+              "stationName": "Total Midrand",
+              "litresDispensed": 20.87,
+              "fuelType": "Eco Diesel 95",
+              "uploadLat": "-24.90",
+              "uploadLong": "24.95",
+              "fuelSlipImageUrl": "url",
+              "sequenceId": "123432",
+              "terminalId": "123111"
             }
             
     + Schema
@@ -3524,6 +3570,7 @@ This interface supports the creation and retrieval of manual fuel slips. These o
                     "transactionSource": {
                         "id": "transactionSource",
                         "type": "string",
+                        "required": true,
                         "enum": [
                             "Manual",
                             "OCR"
@@ -3531,26 +3578,30 @@ This interface supports the creation and retrieval of manual fuel slips. These o
                     },
                     "dateOfTransaction": {
                         "id": "dateOfTransaction",
-                        "type": "string"
+                        "type": "string",
+                        "required": true
                     },
                     "timeOfTransaction": {
                         "id": "timeOfTransaction",
-                        "type": "string"
+                        "type": "string",
+                        "required": true
                     },
                     "transactionNumber": {
                         "id": "transactionNumber",
-                        "type": "string"
+                        "type": "string",
+                        "required": false
                     },
                     "randAmount": {
                         "id": "randAmount",
-                        "type": "number"
+                        "type": "number",
+                        "required": true
                     },
                     "cardNumber": {
                         "id": "cardNumber",
                         "type": "string"
                     },
-                    "stationid": {
-                        "id": "stationid",
+                    "stationId": {
+                        "id": "stationId",
                         "type": "string"
                     },
                     "stationName": {
@@ -3559,7 +3610,8 @@ This interface supports the creation and retrieval of manual fuel slips. These o
                     },
                     "litresDispensed": {
                         "id": "litresDispensed",
-                        "type": "number"
+                        "type": "number",
+                        "required": true
                     },
                     "fuelType": {
                         "id": "fuelType",
@@ -3571,38 +3623,24 @@ This interface supports the creation and retrieval of manual fuel slips. These o
                     },
                     "uploadLong": {
                         "id": "uploadLong",
-                        "type": "string"
+                        "type": "string",
+                        "required": true
                     },
-                    "fuelslipimageurl": {
-                        "id": "fuelslipimageurl",
-                        "type": "string"
+                    "fuelSlipImageUrl": {
+                        "id": "fuelSlipImageUrl",
+                        "type": "string",
+                        "required": true
                     },
                     "sequenceId": {
                         "id": "sequenceId",
-                        "type": "integer"
+                        "type": "string"
                     },
                     "terminalId": {
                         "id": "terminalId",
-                        "type": "integer"
+                        "type": "string",
+                        "required": true
                     }
-                },
-                "required": [
-                    "transactionSource",
-                    "dateOfTransaction",
-                    "timeOfTransaction",
-                    "transactionNumber",
-                    "randAmount",
-                    "cardNumber",
-                    "stationid",
-                    "stationName",
-                    "litresDispensed",
-                    "fuelType",
-                    "uploadLat",
-                    "uploadLong",
-                    "fuelslipimageurl",
-                    "sequenceId",
-                    "terminalId"
-                ]
+                }
             }
             
 
