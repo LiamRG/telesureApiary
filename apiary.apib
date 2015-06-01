@@ -2785,102 +2785,71 @@ This service will update a voucher. It can be redeemed by updating its redeemedD
 
 + Request (application/json)
 
-    + Header
-    
-            x-easyearn-accountId: 12312313
-    
     + Body
     
             {
-                "voucherId":"ABCD-GEFJ-KLMN-OPQR",
-                "voucherBarcode":"21234567",
-                "voucherDescription":"R10.00 voucher",
-                "voidedYN":"N",
-                "voidedDate":"",
-                "redeemedYN":"N",
-                "redeemedDate":"",
-                "voucherIssued":"2015-04-01T14:30:00Z",
-                "voucherExpiry":"2015-04-30T14:30:00Z",
-                "gpsLat":null,
-                "gpsLong":null
-            
+              "voucherId": "ABCD-EFGH-IJKL-MNOP",
+              "redeemedDate": "2015-04-01T14:30:00Z",
+              "gpsLat": "45.92",
+              "gpsLong": "46.99"
             }
     
     + Schema
     
             {
-              "$schema": "http://json-schema.org/draft-04/schema#",
-              "id": "http://jsonschema.net",
-              "type": "object",
-              "properties": {
-                "voucherId": {
-                  "id": "http://jsonschema.net/voucherId",
-                  "required":true,
-                  "type": "string"
-                },
-                "voucherBarcode": {
-                  "id": "http://jsonschema.net/voucherBarcode",
-                  "required":true,
-                  "type": "string"
-                },
-                "voucherDescription": {
-                  "id": "http://jsonschema.net/voucherDescription",
-                  "required":true,
-                  "type": "string"
-                },
-                "voidedYN": {
-                  "id": "http://jsonschema.net/voidedYN",
-                  "required":true,
-                  "type": "string"
-                },
-                "voidedDate": {
-                  "id": "http://jsonschema.net/voidedDate",
-                  "required":true,
-                  "type": "string"
-                },
-                "redeemedYN": {
-                  "id": "http://jsonschema.net/redeemedYN",
-                  "required":true,
-                  "type": "string"
-                },
-                "redeemedDate": {
-                  "id": "http://jsonschema.net/redeemedDate",
-                  "required":true,
-                  "type": "string"
-                },
-                "voucherIssued": {
-                  "id": "http://jsonschema.net/voucherIssued",
-                  "required":true,
-                  "type": "string"
-                },
-                "voucherExpiry": {
-                  "id": "http://jsonschema.net/voucherExpiry",
-                  "required":true,
-                  "type": "string"
-                },
-                "gpsLat": {
-                  "id": "http://jsonschema.net/gpsLat",
-                  "required":false,
-                  "type": "string"
-                },
-                "gpsLong": {
-                  "id": "http://jsonschema.net/gpsLong",
-                  "required":false,
-                  "type": "string"
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "id": "/",
+                "type": "object",
+                "properties": {
+                    "voucherId": {
+                        "id": "voucherId",
+                        "required": true,
+                        "type": "string"
+                    },
+                    "redeemedDate": {
+                        "id": "redeemedDate",
+                        "required": false,
+                        "type": "string"
+                    },
+                    "gpsLat": {
+                        "id": "gpsLat",
+                        "required": false,
+                        "type": "string"
+                    },
+                    "gpsLong": {
+                        "id": "gpsLong",
+                        "required": false,
+                        "type": "string"
+                    }
                 }
             }
             
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     + Header
     
             x-easyearn-accountId: 12312313
+            x-easyearn-usertype: RegularDriver
 
     + Body
     
             {
-                "accountId": "123456",
                 "voucherId":"ABCD-EFGH-IJKL-MNOP"
+            }
+            
+    + Schema
+    
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "id": "/",
+                "type": "object",
+                "properties": {
+                    "voucherId": {
+                        "id": "voucherId",
+                        "required": true,
+                        "type": "string"
+                    }
+                }
             }
     
 
