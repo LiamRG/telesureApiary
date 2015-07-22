@@ -3,6 +3,48 @@ FORMAT: 1A
 # Easy Earn
 This document defines the various Telesure Rewards Program ESB APIs that will be exposed to external systems. These services will allow the Telesure ESB to orchestrate processes with various other systems.
 
+# Group Rewards Cash Back Payment Interfaces
+Enter some description here
+
+## Cashback [/cashback/{batchID}/batchHash]
+
+### Get a SHA256 hash [GET]
+
++ Parameters
+    + batchID (required, string) ... Unique identifier of a specific cashback payment batch file
+    
++ Response 200 (application/json)
+
+    + Header
+    
+    + Body
+    
+            {
+                "sha256HashValue" : "CE7402C6A9C794B361FD7FEBAAFE1237656E6B4DA2C57B5E39E8758B71E6BA93",
+                "shaCreatedDate" : "29-01-2015"
+            }
+            
+    + Schema
+
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "id": "/",
+                "type": "object",
+                "properties": {
+                    "sha256HashValue": {
+                        "id": "sha256HashValue",
+                        "type": "string",
+                        "reqiuired": true
+                    },
+                    "shaCreatedDate": {
+                        "id": "shaCreatedDate",
+                        "type": "string",
+                        "reqiuired": true
+                    }
+                }
+            }
+            
+
 # Group DriveFactor Interfaces
 The users set of services at /users has all the required user resources and functions.
 
