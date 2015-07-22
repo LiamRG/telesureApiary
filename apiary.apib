@@ -6,12 +6,12 @@ This document defines the various Telesure Rewards Program ESB APIs that will be
 # Group Rewards Cash Back Payment Interfaces
 Enter some description here
 
-## Cashback [/cashback/{batchID}/batchHash]
+## Cashback [/cashback/{shaHash}/batchHeader]
 
 ### Get a SHA256 hash [GET]
 
 + Parameters
-    + batchID (required, string) ... Unique identifier of a specific cashback payment batch file
+    + shaHash (required, string) ... Hash value calculated by the receiving system
     
 + Response 200 (application/json)
 
@@ -20,8 +20,15 @@ Enter some description here
     + Body
     
             {
-                "sha256HashValue" : "CE7402C6A9C794B361FD7FEBAAFE1237656E6B4DA2C57B5E39E8758B71E6BA93",
-                "shaCreatedDate" : "29-01-2015"
+              "sha256HashValue": "CE7402C6A9C794B361FD7FEBAAFE1237656E6B4DA2C57B5E39E8758B71E6BA93",
+              "batchID": "123123123",
+              "calculationYearMonth": "December2015",
+              "runDate": "30-01-2015",
+              "runTime": "00:01:56",
+              "totalCashBackCalculated": 1000.99,
+              "totalTransactions": 32,
+              "totalUniquePolicies": 30,
+              "insurer": "09"
             }
             
     + Schema
@@ -34,12 +41,47 @@ Enter some description here
                     "sha256HashValue": {
                         "id": "sha256HashValue",
                         "type": "string",
-                        "reqiuired": true
+                        "required": true
                     },
-                    "shaCreatedDate": {
-                        "id": "shaCreatedDate",
+                    "batchID": {
+                        "id": "batchID",
                         "type": "string",
-                        "reqiuired": true
+                        "required": true
+                    },
+                    "calculationYearMonth": {
+                        "id": "calculationYearMonth",
+                        "type": "string",
+                        "required": true
+                    },
+                    "runDate": {
+                        "id": "runDate",
+                        "type": "string",
+                        "required": true
+                    },
+                    "runTime": {
+                        "id": "runTime",
+                        "type": "string",
+                        "required": true
+                    },
+                    "totalCashBackCalculated": {
+                        "id": "totalCashBackCalculated",
+                        "type": "number",
+                        "required": true
+                    },
+                    "totalTransactions": {
+                        "id": "totalTransactions",
+                        "type": "integer",
+                        "required": true
+                    },
+                    "totalUniquePolicies": {
+                        "id": "totalUniquePolicies",
+                        "type": "integer",
+                        "required": true
+                    },
+                    "insurer": {
+                        "id": "insurer",
+                        "type": "string",
+                        "required": true
                     }
                 }
             }
