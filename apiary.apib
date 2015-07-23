@@ -173,82 +173,28 @@ This interface will return the transaction details for a specific batch
                     "totalTransactions": 32,
                     "totalUniquePolicies": 30,
                     "insurer": "09"
-                }
+                },
+                "fileTransactions": [
+                    {
+                        "policyNumber": 1,
+                        "riskSequence": 1,
+                        "calculatedCashBack": 100.99,
+                        "calculatedPercentage": 0.4,
+                        "riskPremium": 199.99
+                    },
+                    {
+                        "policyNumber": 1,
+                        "riskSequence": 1,
+                        "calculatedCashBack": 100.99,
+                        "calculatedPercentage": 0.4,
+                        "riskPremium": 199.99
+                    }
+                ]
             }
             
     + Schema
 
-            {
-                "$schema": "http://json-schema.org/draft-04/schema#",
-                "id": "/",
-                "type": "object",
-                "properties": {
-                    "fileAttributes": {
-                        "id": "fileAttributes",
-                        "type": "object",
-                        "required": true,
-                        "properties": {
-                            "sha256HashValue": {
-                                "id": "sha256HashValue",
-                                "type": "string",
-                                "required": true
-                            },
-                            "fileName": {
-                                "id": "fileName",
-                                "type": "string",
-                                "required": true
-                            }
-                        }
-                    },
-                    "fileHeader": {
-                        "id": "fileHeader",
-                        "type": "object",
-                        "required": true,
-                        "properties": {
-                            "batchID": {
-                                "id": "batchID",
-                                "type": "string",
-                                "required": true
-                            },
-                            "calculationYearMonth": {
-                                "id": "calculationYearMonth",
-                                "type": "string",
-                                "required": true
-                            },
-                            "runDate": {
-                                "id": "runDate",
-                                "type": "string",
-                                "required": true
-                            },
-                            "runTime": {
-                                "id": "runTime",
-                                "type": "string",
-                                "required": true
-                            },
-                            "totalCashBackCalculated": {
-                                "id": "totalCashBackCalculated",
-                                "type": "number",
-                                "required": true
-                            },
-                            "totalTransactions": {
-                                "id": "totalTransactions",
-                                "type": "integer",
-                                "required": true
-                            },
-                            "totalUniquePolicies": {
-                                "id": "totalUniquePolicies",
-                                "type": "integer",
-                                "required": true
-                            },
-                            "insurer": {
-                                "id": "insurer",
-                                "type": "string",
-                                "required": true
-                            }
-                        }
-                    }
-                }
-            }
+            
 
 + Response 404 (application/json)
 
