@@ -17,7 +17,6 @@ Enter some description here
 
     + Header
     
-             Authorization: Basic dGVzdDpwYXNzd29yZDE=
              Accept: application/json
     
     + Body
@@ -112,7 +111,35 @@ Enter some description here
                     }
                 }
             }
-            
+
++ Response 404 (application/json)
+
+
++ Response 401 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "You are not authorized to use this service.",
+                    "internalMessage": "Unauthorized",
+                    "code": 401,
+                    "moreInfo": ""
+                }
+            ]
+        }
+
++ Response 503 (application/json)
+
+        {
+            "errors": [
+                {
+                    "userMessage": "The requested resource is not available.",
+                    "internalMessage": "Service Unavailable",
+                    "code": 503,
+                    "moreInfo": ""
+                }
+            ]
+        }
 
 # Group DriveFactor Interfaces
 The users set of services at /users has all the required user resources and functions.
