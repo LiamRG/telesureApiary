@@ -23,15 +23,20 @@ Enter some description here
     + Body
     
             {
-              "sha256HashValue": "D238CE7CBA8992F0CDD97912E2A7B93E739EDF16AD94112AE3A9B617A4235B85",
-              "batchID": "75ad9fc5-98fd-4be6-beee-4773c046e98d",
-              "calculationYearMonth": "12-2015",
-              "runDate": "30-01-2015",
-              "runTime": "00:01:56",
-              "totalCashBackCalculated": 9541.99,
-              "totalTransactions": 32,
-              "totalUniquePolicies": 30,
-              "insurer": "09"
+                "fileAttributes": {
+                    "sha256HashValue": "D238CE7CBA8992F0CDD97912E2A7B93E739EDF16AD94112AE3A9B617A4235B85",
+                    "fileName": "cashbackFile.csv"
+                },
+                "fileHeader": {
+                    "batchID": "75ad9fc5-98fd-4be6-beee-4773c046e98d",
+                    "calculationYearMonth": "12-2015",
+                    "runDate": "30-01-2015",
+                    "runTime": "00:01:56",
+                    "totalCashBackCalculated": 9541.99,
+                    "totalTransactions": 32,
+                    "totalUniquePolicies": 30,
+                    "insurer": "09"
+                }
             }
             
     + Schema
@@ -41,50 +46,69 @@ Enter some description here
                 "id": "/",
                 "type": "object",
                 "properties": {
-                    "sha256HashValue": {
-                        "id": "sha256HashValue",
-                        "type": "string",
-                        "required": true
+                    "fileAttributes": {
+                        "id": "fileAttributes",
+                        "type": "object",
+                        "required": true,
+                        "properties": {
+                            "sha256HashValue": {
+                                "id": "sha256HashValue",
+                                "type": "string",
+                                "required": true
+                            },
+                            "fileName": {
+                                "id": "fileName",
+                                "type": "string",
+                                "required": true
+                            }
+                        }
                     },
-                    "batchID": {
-                        "id": "batchID",
-                        "type": "string",
-                        "required": true
-                    },
-                    "calculationYearMonth": {
-                        "id": "calculationYearMonth",
-                        "type": "string",
-                        "required": true
-                    },
-                    "runDate": {
-                        "id": "runDate",
-                        "type": "string",
-                        "required": true
-                    },
-                    "runTime": {
-                        "id": "runTime",
-                        "type": "string",
-                        "required": true
-                    },
-                    "totalCashBackCalculated": {
-                        "id": "totalCashBackCalculated",
-                        "type": "number",
-                        "required": true
-                    },
-                    "totalTransactions": {
-                        "id": "totalTransactions",
-                        "type": "integer",
-                        "required": true
-                    },
-                    "totalUniquePolicies": {
-                        "id": "totalUniquePolicies",
-                        "type": "integer",
-                        "required": true
-                    },
-                    "insurer": {
-                        "id": "insurer",
-                        "type": "string",
-                        "required": true
+                    "fileHeader": {
+                        "id": "fileHeader",
+                        "type": "object",
+                        "required": true,
+                        "properties": {
+                            "batchID": {
+                                "id": "batchID",
+                                "type": "string",
+                                "required": true
+                            },
+                            "calculationYearMonth": {
+                                "id": "calculationYearMonth",
+                                "type": "string",
+                                "required": true
+                            },
+                            "runDate": {
+                                "id": "runDate",
+                                "type": "string",
+                                "required": true
+                            },
+                            "runTime": {
+                                "id": "runTime",
+                                "type": "string",
+                                "required": true
+                            },
+                            "totalCashBackCalculated": {
+                                "id": "totalCashBackCalculated",
+                                "type": "number",
+                                "required": true
+                            },
+                            "totalTransactions": {
+                                "id": "totalTransactions",
+                                "type": "integer",
+                                "required": true
+                            },
+                            "totalUniquePolicies": {
+                                "id": "totalUniquePolicies",
+                                "type": "integer",
+                                "required": true
+                            },
+                            "insurer": {
+                                "id": "insurer",
+                                "type": "string",
+                                "required": true
+                            }
+                        }
                     }
                 }
             }
