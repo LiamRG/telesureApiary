@@ -6,7 +6,7 @@ This document defines the various Telesure Rewards Program ESB APIs that will be
 # Group Rewards Cash Back Payment Interfaces
 These interfaces will describe cash back interfaces that can be called by external systems requiring cash back data.
 
-## Cashback [/cashback/{batchID}]
+## Cashback Header [/cashback/{batchID}]
 
 ### Get a file has for a specific batch [GET]
 This interface will be used exclusively by the AS400 System. The interface will be called when the AS400 needs to validate a cash back payment file recieved.
@@ -143,7 +143,7 @@ This interface will be used exclusively by the AS400 System. The interface will 
         }
 
 
-## Cashback [/cashback/{batchID}/transactions]
+## Cashback Header and Transactions [/cashback/{batchID}/transactions]
 
 ### Get the transaction detail for a specific batch [GET]
 This interface will return the transaction details for a specific batch
